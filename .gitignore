@@ -1,0 +1,5 @@
+.DS_Store
+*.cookies
+raw/
+node_modules/
+.vscode/

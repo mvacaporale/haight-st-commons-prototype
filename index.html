@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Haight St. Commons — Prototype Index</title>
+<style>
+  :root{ --ink:#1d2b26; --cream:#faf9f5; --teal:#1d3330; --green:#2f6f5e; --muted:#6b6b63; --line:#e5e3da; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--cream); color:var(--ink);
+    font:16px/1.55 ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+  header{ background:var(--teal); color:#fff; padding:40px 28px 44px; }
+  .wrap{ max-width:860px; margin:0 auto; }
+  .brand{ display:inline-block; border:2px solid rgba(255,255,255,.85); border-radius:8px;
+    padding:4px 12px; font-family:Georgia,"Times New Roman",serif; font-weight:700; letter-spacing:.02em; }
+  h1{ font-family:Georgia,"Times New Roman",serif; font-size:2.4rem; margin:20px 0 6px; font-weight:700; }
+  header p{ margin:0; opacity:.85; max-width:60ch; }
+  main{ padding:36px 28px 60px; }
+  .note{ background:#fff; border:1px solid var(--line); border-radius:10px; padding:16px 20px;
+    color:var(--muted); font-size:.92rem; margin-bottom:30px; }
+  .note b{ color:var(--ink); }
+  .grid{ display:grid; gap:14px; }
+  a.card{ display:block; text-decoration:none; color:inherit; background:#fff;
+    border:1px solid var(--line); border-radius:10px; padding:18px 20px; transition:border-color .15s, transform .15s; }
+  a.card:hover{ border-color:var(--green); transform:translateY(-1px); }
+  .card .t{ font-family:Georgia,"Times New Roman",serif; font-size:1.15rem; font-weight:700; }
+  .card .d{ color:var(--muted); font-size:.92rem; margin-top:3px; }
+  .tag{ display:inline-block; font-size:.7rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--green); border:1px solid var(--green); border-radius:20px; padding:1px 9px; margin-left:8px; vertical-align:middle; }
+  footer{ color:var(--muted); font-size:.85rem; padding:0 28px 50px; }
+  footer .wrap{ border-top:1px solid var(--line); padding-top:18px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <span class="brand">HSt.C</span>
+    <h1>Haight St. Commons — Prototype</h1>
+    <p>Design mockups for the planned self-serve platform where co-op houses manage their own
+       listings and seekers browse &amp; apply. Dummy data (&ldquo;Fernwood&rdquo;); no backend.</p>
+  </div>
+</header>
+<main>
+  <div class="wrap">
+    <div class="note">
+      <b>How to view:</b> open any file below directly in a browser, or run a static server from the
+      repo root (<code>python3 -m http.server</code>) and visit <code>localhost:8000</code>.
+      Everything is a single self-contained HTML file — edit the markup/CSS inline.
+    </div>
+    <div class="grid">
+      <a class="card" href="haight-st-commons.html">
+        <div class="t">Public Home Page<span class="tag">main</span></div>
+        <div class="d">The public site — Houses / Events / Projects directory, illustrated-neighborhood hero, mission band.</div>
+      </a>
+      <a class="card" href="house-dashboard-flow.html">
+        <div class="t">Signed-in House Dashboard<span class="tag">canonical</span></div>
+        <div class="d">Member portal flow: dashboard, house info, create-listing — with a &ldquo;Builder notes&rdquo; overlay for the engineer.</div>
+      </a>
+      <a class="card" href="commons-line-directory.html">
+        <div class="t">The Commons Line — House Directory</div>
+        <div class="d">House directory with the tag-bar filter concept.</div>
+      </a>
+      <a class="card" href="house-directory.html">
+        <div class="t">House Directory</div>
+        <div class="d">Alternate house directory layout.</div>
+      </a>
+      <a class="card" href="house-scrapbook.html">
+        <div class="t">House Scrapbook</div>
+        <div class="d">A single house profile, scrapbook treatment.</div>
+      </a>
+      <a class="card" href="commons-ledger.html">
+        <div class="t">The Commons Ledger</div>
+        <div class="d">Ledger-style directory mockup.</div>
+      </a>
+      <a class="card" href="hero-banner.html">
+        <div class="t">Hero Banner</div>
+        <div class="d">Standalone hero / banner treatment.</div>
+      </a>
+    </div>
+  </div>
+</main>
+<footer>
+  <div class="wrap">Exported from Claude artifacts · design prototype only, not production code.</div>
+</footer>
+</body>
+</html>

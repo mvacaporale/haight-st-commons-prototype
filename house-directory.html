@@ -1,0 +1,510 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<title>Haight St Commons — House Directory</title>
+<style>
+  /* ============ RISO BULLETIN BOARD ============ */
+  :root{
+    --paper:#f3e8cf;
+    --paper-2:#efe0c0;
+    --board:#243b35;        /* deep forest board */
+    --board-2:#1a2d28;
+    --ink-blue:#0f3fb2;     /* federal / bright riso blue */
+    --ink-pink:#ff2d6e;     /* fluoro hot pink */
+    --ink-dim:#4a3d2a;      /* warm near-black for small type */
+    --stamp:#e4123f;        /* bright screenprint red */
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:
+      radial-gradient(circle at 20% 10%, #2c463f 0, transparent 60%),
+      radial-gradient(circle at 85% 80%, #1c322c 0, transparent 55%),
+      var(--board);
+    color:var(--ink-dim);
+    font-family:Georgia,"Times New Roman",serif;
+    overflow-x:hidden;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* board grain + halftone overlay (CSS only, non-interactive) */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background-image:radial-gradient(rgba(0,0,0,.28) 1px, transparent 1.4px);
+    background-size:5px 5px;opacity:.35;mix-blend-mode:multiply;
+  }
+  .grain{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.5;mix-blend-mode:overlay}
+  .wrap{position:relative;z-index:2;max-width:1180px;margin:0 auto;padding:0 20px 80px}
+
+  /* ---------- NAV ---------- */
+  nav.topbar{
+    position:relative;z-index:3;
+    display:flex;align-items:center;gap:22px;flex-wrap:wrap;
+    max-width:1180px;margin:0 auto;padding:22px 20px 14px;
+  }
+  .logo{
+    font-family:"Arial Narrow",Arial,system-ui,sans-serif;
+    font-weight:700;letter-spacing:.5px;font-size:21px;
+    color:var(--paper);background:var(--ink-blue);
+    border:3px solid var(--paper);
+    padding:6px 11px 5px;line-height:1;
+    box-shadow:4px 4px 0 rgba(0,0,0,.35);
+    transform:rotate(-2deg);
+  }
+  .navlinks{display:flex;gap:4px 16px;flex-wrap:wrap;align-items:baseline;flex:1}
+  .navlinks a{
+    font-family:"Arial Narrow",Arial,sans-serif;
+    text-transform:uppercase;letter-spacing:1px;font-size:15px;font-weight:700;
+    color:var(--paper);text-decoration:none;padding:3px 2px;cursor:pointer;
+    border-bottom:3px solid transparent;background:transparent;
+  }
+  .navlinks a:hover{color:var(--ink-pink)}
+  .navlinks a.active{border-bottom-color:var(--ink-pink);color:var(--paper)}
+  .navlinks a:focus-visible,.account:focus-visible{outline:3px solid var(--ink-pink);outline-offset:2px}
+  .account{
+    font-family:Georgia,serif;font-style:italic;font-size:14px;
+    color:var(--paper);opacity:.82;text-decoration:none;white-space:nowrap;
+    border-bottom:1px dotted var(--paper);
+  }
+  .account:hover{opacity:1;color:var(--ink-pink);border-bottom-color:var(--ink-pink)}
+
+  /* ---------- MASTHEAD (a pasted-up banner flyer) ---------- */
+  .masthead{
+    position:relative;background:var(--paper);color:var(--ink-blue);
+    border:2px solid var(--ink-dim);
+    margin:10px 0 6px;padding:26px 28px 22px;
+    transform:rotate(-.5deg);
+    box-shadow:6px 7px 0 rgba(0,0,0,.3);
+    overflow:hidden;
+  }
+  .masthead::after{ /* halftone wash */
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:radial-gradient(var(--ink-pink) .8px,transparent 1.2px);
+    background-size:7px 7px;opacity:.12;
+  }
+  .masthead h1{
+    font-family:"Haettenschweiler","Arial Narrow Bold","Impact",sans-serif;
+    font-weight:900;margin:0;line-height:.9;letter-spacing:.5px;
+    font-size:clamp(34px,7vw,74px);text-transform:uppercase;
+    color:var(--ink-blue);position:relative;
+    text-shadow:3px 3px 0 var(--ink-pink);
+  }
+  .masthead p{
+    font-family:Georgia,serif;font-style:italic;max-width:620px;
+    margin:12px 0 0;font-size:clamp(14px,1.9vw,18px);color:var(--ink-dim);line-height:1.45;
+  }
+  .mock-marker{
+    position:absolute;top:14px;right:-40px;transform:rotate(45deg);
+    background:var(--ink-blue);color:var(--paper);
+    font-family:"Arial Narrow",sans-serif;font-weight:700;font-size:11px;
+    letter-spacing:1.5px;text-transform:uppercase;padding:5px 46px;
+    box-shadow:0 2px 4px rgba(0,0,0,.3);
+  }
+
+  /* ---------- FILTER STRIP ---------- */
+  .filterbar{
+    position:relative;background:var(--ink-pink);color:var(--paper);
+    border:2px solid var(--ink-dim);margin:18px 0 30px;padding:16px 18px;
+    transform:rotate(.4deg);box-shadow:5px 6px 0 rgba(0,0,0,.28);
+  }
+  .filterbar h2{
+    font-family:"Arial Narrow",Arial,sans-serif;text-transform:uppercase;
+    font-size:14px;letter-spacing:2px;margin:0 0 11px;font-weight:700;
+    display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
+  }
+  .matchcount{
+    font-family:Georgia,serif;font-style:italic;text-transform:none;
+    letter-spacing:0;font-size:14px;opacity:.95;
+  }
+  .tagrow{display:flex;flex-wrap:wrap;gap:9px}
+  .tagbtn{
+    font-family:"Arial Narrow",Arial,sans-serif;font-weight:700;
+    font-size:14px;letter-spacing:.5px;text-transform:uppercase;
+    background:var(--paper);color:var(--ink-dim);
+    border:2px solid var(--ink-dim);padding:5px 12px;cursor:pointer;
+    box-shadow:2px 2px 0 rgba(0,0,0,.3);transition:transform .05s;
+  }
+  .tagbtn:hover{transform:translate(-1px,-1px)}
+  .tagbtn:active{transform:translate(1px,1px);box-shadow:1px 1px 0 rgba(0,0,0,.3)}
+  .tagbtn[aria-pressed="true"]{background:var(--ink-blue);color:var(--paper);border-color:var(--paper)}
+  .tagbtn.lead{border-width:3px}
+  .tagbtn.lead::before{content:"★ ";color:var(--stamp)}
+  .tagbtn.lead[aria-pressed="true"]::before{color:var(--paper)}
+  .tagbtn:focus-visible{outline:3px solid var(--paper);outline-offset:2px}
+
+  /* ---------- BOARD / FLYERS ---------- */
+  .board{display:flex;flex-wrap:wrap;gap:30px 26px;justify-content:center;align-items:flex-start}
+  .flyer{
+    position:relative;width:330px;background:var(--paper);
+    border:2px solid var(--ink-dim);
+    padding:40px 22px 20px;margin-top:14px;
+    box-shadow:5px 7px 0 rgba(0,0,0,.32);
+    isolation:isolate;
+  }
+  .flyer::after{ /* halftone grain inside paper */
+    content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+    background-image:radial-gradient(rgba(15,63,178,.5) .7px,transparent 1.1px);
+    background-size:6px 6px;opacity:.1;
+  }
+  .flyer > *{position:relative;z-index:1}
+  /* pushpin */
+  .pin{
+    position:absolute;top:-11px;left:50%;transform:translateX(-50%);z-index:4;
+    width:22px;height:22px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #fff 0 12%, var(--stamp) 18% 60%, #8d0a24 100%);
+    box-shadow:0 3px 5px rgba(0,0,0,.45);
+  }
+  .pin::after{content:"";position:absolute;top:18px;left:50%;transform:translateX(-50%);
+    width:3px;height:9px;background:#6b0a1d}
+  /* tape (alt flyers) */
+  .tape{
+    position:absolute;top:-13px;left:22px;width:92px;height:26px;z-index:4;
+    background:rgba(255,45,110,.42);border-left:1px dashed rgba(0,0,0,.2);border-right:1px dashed rgba(0,0,0,.2);
+    transform:rotate(-7deg);box-shadow:0 1px 2px rgba(0,0,0,.15);
+    mix-blend-mode:multiply;
+  }
+
+  .f-name{
+    font-family:"Haettenschweiler","Arial Narrow Bold","Impact",sans-serif;
+    font-weight:900;text-transform:uppercase;line-height:.86;letter-spacing:.5px;
+    font-size:40px;margin:0 0 3px;
+  }
+  /* overprint misregistration on names */
+  .flyer.ink-blue .f-name{color:var(--ink-blue);text-shadow:2.5px 2px 0 rgba(255,45,110,.72)}
+  .flyer.ink-pink .f-name{color:var(--ink-pink);text-shadow:2.5px 2px 0 rgba(15,63,178,.72)}
+  .f-meta{
+    font-family:"Arial Narrow",Arial,sans-serif;text-transform:uppercase;
+    font-size:14px;letter-spacing:.8px;font-weight:700;margin:0 0 12px;
+    color:var(--ink-dim);border-bottom:2px solid var(--ink-dim);padding-bottom:10px;
+  }
+  .flyer.ink-blue .f-meta{color:var(--ink-blue)}
+  .flyer.ink-pink .f-meta{color:var(--ink-pink)}
+  .f-stats{display:flex;gap:16px;margin:0 0 11px;font-family:"Arial Narrow",Arial,sans-serif}
+  .f-stats div{line-height:1}
+  .f-stats b{display:block;font-size:26px;font-weight:700;color:var(--ink-dim)}
+  .f-stats span{font-size:11px;text-transform:uppercase;letter-spacing:1px;opacity:.75}
+  .f-rent{
+    font-family:"Arial Narrow",Arial,sans-serif;font-weight:700;font-size:18px;
+    margin:0 0 11px;color:var(--ink-dim);
+  }
+  .f-rent em{font-style:normal;font-size:12px;letter-spacing:1px;text-transform:uppercase;opacity:.7}
+  .f-desc{font-family:Georgia,serif;font-size:14px;line-height:1.5;margin:0 0 14px}
+  .f-traits{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 16px}
+  .trait{
+    font-family:"Arial Narrow",Arial,sans-serif;font-size:12px;font-weight:700;
+    text-transform:uppercase;letter-spacing:.5px;
+    border:1.5px solid var(--ink-dim);padding:2px 8px;color:var(--ink-dim);
+  }
+  .f-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;
+    border-top:2px dotted var(--ink-dim);padding-top:11px}
+  .f-logged{font-family:Georgia,serif;font-style:italic;font-size:12px;opacity:.72}
+  .apply{
+    font-family:"Arial Narrow",Arial,sans-serif;font-weight:700;text-transform:uppercase;
+    letter-spacing:.8px;font-size:14px;text-decoration:none;
+    background:var(--ink-blue);color:var(--paper);border:2px solid var(--ink-dim);
+    padding:6px 13px;box-shadow:2px 2px 0 rgba(0,0,0,.3);white-space:nowrap;
+  }
+  .apply:hover{background:var(--ink-pink)}
+  .apply:focus-visible{outline:3px solid var(--stamp);outline-offset:2px}
+  .notrec{font-family:Georgia,serif;font-style:italic;font-size:13px;opacity:.65}
+
+  /* ROOM OPEN screenprinted burst */
+  .stamp{
+    position:absolute;top:-16px;right:-14px;z-index:5;width:96px;height:96px;
+    transform:rotate(11deg);filter:drop-shadow(1px 2px 2px rgba(0,0,0,.3));
+  }
+  .stamp svg{width:100%;height:100%;display:block}
+  .stamp .burst{fill:var(--stamp)}
+  .stamp .ring{fill:none;stroke:var(--paper);stroke-width:2.2}
+  .stamp text{fill:var(--paper);font-family:"Arial Narrow",Arial,sans-serif;font-weight:700;letter-spacing:1px}
+
+  /* ---------- EVENTS VIEW ---------- */
+  #events-view{display:none}
+  .ev-head{
+    background:var(--paper);border:2px solid var(--ink-dim);padding:20px 24px;
+    transform:rotate(-.6deg);box-shadow:6px 7px 0 rgba(0,0,0,.3);margin:10px 0 28px;position:relative;overflow:hidden;
+  }
+  .ev-head::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:radial-gradient(var(--ink-blue) .8px,transparent 1.2px);background-size:7px 7px;opacity:.1}
+  .ev-head h1{
+    font-family:"Haettenschweiler","Arial Narrow Bold","Impact",sans-serif;font-weight:900;
+    text-transform:uppercase;font-size:clamp(30px,6vw,58px);margin:0;color:var(--ink-pink);
+    text-shadow:3px 2px 0 var(--ink-blue);line-height:.9;
+  }
+  .ev-head p{font-family:Georgia,serif;font-style:italic;margin:10px 0 0;color:var(--ink-dim)}
+  .evlist{display:flex;flex-direction:column;gap:16px;max-width:760px;margin:0 auto}
+  .event{
+    display:flex;gap:18px;align-items:stretch;background:var(--paper);
+    border:2px solid var(--ink-dim);box-shadow:4px 5px 0 rgba(0,0,0,.28);
+    padding:0;overflow:hidden;
+  }
+  .event:nth-child(odd){transform:rotate(-.5deg)}
+  .event:nth-child(even){transform:rotate(.6deg)}
+  .ev-date{
+    flex:0 0 86px;background:var(--ink-blue);color:var(--paper);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    font-family:"Haettenschweiler","Arial Narrow Bold","Impact",sans-serif;padding:14px 6px;
+  }
+  .ev-date .mo{font-size:16px;letter-spacing:2px}
+  .ev-date .d{font-size:40px;line-height:.85}
+  .ev-body{padding:14px 18px;flex:1}
+  .ev-body h3{
+    font-family:"Arial Narrow",Arial,sans-serif;font-weight:700;text-transform:uppercase;
+    letter-spacing:.5px;font-size:21px;margin:0 0 5px;color:var(--ink-dim);
+  }
+  .ev-body .ev-meta{font-family:Georgia,serif;font-size:14px;color:var(--ink-dim);line-height:1.5}
+  .ev-body .ev-meta b{color:var(--ink-pink)}
+  .ev-rsvp{align-self:center;margin:0 16px 0 0}
+
+  /* ---------- FOOTER COLOPHON ---------- */
+  footer{
+    position:relative;z-index:2;max-width:1180px;margin:56px auto 0;padding:22px 20px 0;
+    border-top:2px dashed rgba(243,232,207,.45);
+    font-family:Georgia,serif;color:var(--paper);
+    display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:baseline;
+  }
+  footer p{margin:0;font-style:italic;font-size:13px;opacity:.82;max-width:520px;line-height:1.5}
+  footer .flinks{display:flex;gap:16px}
+  footer a{color:var(--paper);text-decoration:none;font-size:13px;border-bottom:1px dotted var(--paper);opacity:.85}
+  footer a:hover{color:var(--ink-pink);border-bottom-color:var(--ink-pink);opacity:1}
+  footer a:focus-visible{outline:2px solid var(--ink-pink);outline-offset:3px}
+
+  .hidden{display:none !important}
+  @media (prefers-reduced-motion:reduce){*{transition:none !important}}
+  @media (max-width:560px){
+    .flyer{width:100%;max-width:360px}
+    .masthead{transform:none}.filterbar{transform:none}
+    .flyer{transform:none !important}
+  }
+</style>
+
+<!-- grain: inline SVG turbulence, no external refs -->
+<svg class="grain" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+  <rect width="100%" height="100%" filter="url(#noise)"/>
+</svg>
+
+<nav class="topbar">
+  <span class="logo">HSt.C</span>
+  <div class="navlinks">
+    <a id="nav-houses" class="active" data-view="houses">Houses</a>
+    <a id="nav-events" data-view="events">Events</a>
+    <a href="#" onclick="return false">Projects</a>
+    <a href="#" onclick="return false">Slack</a>
+    <a href="#" onclick="return false">Github</a>
+    <a href="#" onclick="return false">Instagram</a>
+  </div>
+  <a class="account" href="#" onclick="return false">For houses &rarr;</a>
+</nav>
+
+<div class="wrap">
+
+  <!-- ======= HOUSES VIEW ======= -->
+  <section id="houses-view" aria-label="House directory">
+    <div class="masthead">
+      <span class="mock-marker">Mockup · placeholder houses</span>
+      <h1>House Directory</h1>
+      <p>A network of not-for-profit co-ops and intentional communities in the heart of San Francisco.</p>
+    </div>
+
+    <div class="filterbar">
+      <h2>Pin down a place <span class="matchcount" id="matchcount"></span></h2>
+      <div class="tagrow" id="tagrow"></div>
+    </div>
+
+    <div class="board" id="board"></div>
+  </section>
+
+  <!-- ======= EVENTS VIEW ======= -->
+  <section id="events-view" aria-label="Events">
+    <div class="ev-head">
+      <h1>What's On</h1>
+      <p>Open houses, work parties, salons &amp; repair cafés — all welcome, nothing fancy.</p>
+    </div>
+    <div class="evlist" id="evlist"></div>
+  </section>
+
+</div>
+
+<footer>
+  <p>A grassroots directory, kept by the houses themselves. Entries older than 45 days are retired automatically, so what you see is what's true this week.</p>
+  <div class="flinks">
+    <a href="#" onclick="return false">Log in</a>
+    <a href="#" onclick="return false">Add your house</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var HOUSES = [
+    {name:"Fig House", hood:"Haight-Ashbury", tags:["available","dinner","pets","haight"], beds:11, residents:9, rent:"$1,350–1,700", logged:"logged 6 days ago", traits:["weekly dinner","dogs & cats","consensus"], desc:"A big Victorian built around a shared table. Sunday dinners for the whole house, a garden out back, and a slow-consensus way of deciding things that newcomers either love or learn to."},
+    {name:"Canyon House", hood:"Cole Valley", tags:["dinner","intergen","colevalley"], beds:7, residents:7, rent:"$1,500–1,900", logged:"logged 3 weeks ago", traits:["intergenerational","weekly dinner","quiet"], desc:"Residents from their twenties to their sixties under one roof — quiet, book-lined, and steps from the N-Judah and the park. Open a window and you can hear the Sunday drum circle."},
+    {name:"Lantern House", hood:"Lower Haight", tags:["available","pets","lowerhaight"], beds:9, residents:8, rent:"$1,100–1,450", logged:"logged yesterday", traits:["dog-friendly","mural walls","rolling intake"], desc:"The affordable one, and proud of it. Dog-friendly, mural-covered, loud in the best way. Admits on a rolling basis rather than all at once — email if a room speaks to you."},
+    {name:"The Grove", hood:"NoPa", tags:["dinner","intergen","nopa"], beds:6, residents:6, rent:"$1,600–2,000", logged:"logged 2 weeks ago", traits:["intergenerational","Thursday dinner","garden"], desc:"Small, calm, and serious about shared meals. A standing Thursday dinner nobody misses, a seed library on the porch, and compost that could win awards."},
+    {name:"Meridian", hood:"Haight-Ashbury", tags:["available","dinner","intergen","haight"], beds:12, residents:11, rent:"$1,400–1,800", logged:"logged 4 days ago", traits:["monthly salon","woodshop","hosts newcomers"], desc:"One of the largest houses in the network and one of the oldest. Monthly salons, a working woodshop in the basement, and a long habit of taking a chance on people new to communal living."},
+    {name:"Tidewater", hood:"Lower Haight", tags:["pets","lowerhaight"], beds:8, residents:7, rent:"$1,150–1,500", logged:"logged 5 weeks ago", traits:["three cats","bikes in the hall","thrift & repair"], desc:"Co-op kitchen, bikes in the hall, three cats who run the place. Values thrift, repair, and keeping rent low enough to keep saying yes to artists and organizers."}
+  ];
+
+  var EVENTS = [
+    {mo:"OCT", d:"08", title:"Open House & Shared Dinner", host:"Fig House", where:"Haight-Ashbury", time:"Wed · 6:30 PM"},
+    {mo:"OCT", d:"12", title:"Garden Work Party", host:"Tidewater", where:"Lower Haight", time:"Sun · 10:00 AM"},
+    {mo:"OCT", d:"19", title:"Salon: On Living in Common", host:"Meridian", where:"Haight-Ashbury", time:"Sun · 7:00 PM"},
+    {mo:"OCT", d:"26", title:"Newcomer Mixer", host:"the Commons", where:"NoPa", time:"Sun · 5:00 PM"},
+    {mo:"NOV", d:"02", title:"Repair Café", host:"The Grove", where:"NoPa", time:"Sun · 1:00 PM"}
+  ];
+
+  // filter definitions: key -> label. "available" is the lead tag.
+  var TAGDEFS = [
+    {key:"available", label:"Vacancy now", lead:true},
+    {key:"pets", label:"Pets"},
+    {key:"dinner", label:"Weekly dinner"},
+    {key:"intergen", label:"Intergenerational"},
+    {key:"haight", label:"Haight-Ashbury"},
+    {key:"lowerhaight", label:"Lower Haight"},
+    {key:"colevalley", label:"Cole Valley"},
+    {key:"nopa", label:"NoPa"}
+  ];
+
+  // deterministic "hand-pinned" rotations (seed k7f29qx-riso-9whq)
+  var ROT = [-2.4, 1.8, -1.2, 2.6, -2.9, 1.3];
+  var active = {}; // selected tag keys
+
+  function el(tag, cls, html){
+    var e = document.createElement(tag);
+    if(cls) e.className = cls;
+    if(html !== undefined) e.innerHTML = html;
+    return e;
+  }
+
+  // ---- build tag buttons ----
+  var tagrow = document.getElementById("tagrow");
+  TAGDEFS.forEach(function(t){
+    var b = el("button", "tagbtn" + (t.lead ? " lead" : ""), t.label);
+    b.type = "button";
+    b.setAttribute("aria-pressed","false");
+    b.setAttribute("data-key", t.key);
+    b.addEventListener("click", function(){
+      if(active[t.key]){ delete active[t.key]; b.setAttribute("aria-pressed","false"); }
+      else { active[t.key] = true; b.setAttribute("aria-pressed","true"); }
+      render();
+    });
+    tagrow.appendChild(b);
+  });
+
+  var stampSVG =
+    '<svg viewBox="0 0 100 100" aria-hidden="true">' +
+    '<path class="burst" d="M50 2 L58 16 L74 10 L74 27 L90 28 L80 42 L95 52 L80 62 L88 78 L71 76 L68 92 L54 82 L50 98 L44 83 L30 92 L27 75 L10 78 L19 62 L3 52 L18 42 L8 27 L25 28 L25 11 L41 17 Z"/>' +
+    '<circle class="ring" cx="50" cy="50" r="30"/>' +
+    '<text x="50" y="46" text-anchor="middle" font-size="15">ROOM</text>' +
+    '<text x="50" y="62" text-anchor="middle" font-size="15">OPEN</text>' +
+    '</svg>';
+
+  function makeFlyer(h, idx){
+    var avail = h.tags.indexOf("available") !== -1;
+    var inkClass = (idx % 2 === 0) ? "ink-blue" : "ink-pink";
+    var f = el("article", "flyer " + inkClass);
+    f.style.transform = "rotate(" + (ROT[idx % ROT.length]) + "deg)";
+
+    // pin or tape alternate
+    if(idx % 2 === 0){ f.appendChild(el("span","pin")); }
+    else { f.appendChild(el("span","tape")); }
+
+    if(avail){
+      var s = el("div","stamp"); s.innerHTML = stampSVG; f.appendChild(s);
+    }
+
+    f.appendChild(el("h3","f-name", h.name));
+    f.appendChild(el("p","f-meta", h.hood));
+
+    var stats = el("div","f-stats");
+    stats.appendChild(el("div",null,"<b>"+h.beds+"</b><span>bedrooms</span>"));
+    stats.appendChild(el("div",null,"<b>"+h.residents+"</b><span>residents</span>"));
+    f.appendChild(stats);
+
+    f.appendChild(el("p","f-rent", h.rent + ' <em>/ room / mo</em>'));
+    f.appendChild(el("p","f-desc", h.desc));
+
+    var tr = el("div","f-traits");
+    h.traits.forEach(function(t){ tr.appendChild(el("span","trait", t)); });
+    f.appendChild(tr);
+
+    var foot = el("div","f-foot");
+    foot.appendChild(el("span","f-logged", h.logged));
+    if(avail){
+      var a = el("a","apply","Apply to this house ↗");
+      a.href = "#"; a.setAttribute("rel","external");
+      a.addEventListener("click", function(e){ e.preventDefault(); });
+      foot.appendChild(a);
+    } else {
+      foot.appendChild(el("span","notrec","not recruiting right now"));
+    }
+    f.appendChild(foot);
+    return f;
+  }
+
+  function matches(h){
+    for(var k in active){
+      if(active.hasOwnProperty(k) && active[k]){
+        if(h.tags.indexOf(k) === -1) return false;
+      }
+    }
+    return true;
+  }
+
+  function render(){
+    var board = document.getElementById("board");
+    board.innerHTML = "";
+    var shown = 0, i = 0;
+    HOUSES.forEach(function(h){
+      if(matches(h)){ board.appendChild(makeFlyer(h, i)); shown++; i++; }
+    });
+    if(shown === 0){
+      var empty = el("div", null,
+        '<p style="font-family:Georgia,serif;font-style:italic;color:#f3e8cf;text-align:center;font-size:17px;max-width:420px;line-height:1.5">No houses match all of those at once. Pull a pin or two and the board will fill back up.</p>');
+      board.appendChild(empty);
+    }
+    var mc = document.getElementById("matchcount");
+    mc.textContent = "— " + shown + " of " + HOUSES.length + " house" + (HOUSES.length===1?"":"s") + " on the board";
+  }
+
+  // ---- events ----
+  var evlist = document.getElementById("evlist");
+  EVENTS.forEach(function(ev){
+    var row = el("article","event");
+    var dt = el("div","ev-date","<span class='mo'>"+ev.mo+"</span><span class='d'>"+ev.d+"</span>");
+    row.appendChild(dt);
+    var body = el("div","ev-body");
+    body.appendChild(el("h3",null, ev.title));
+    body.appendChild(el("p","ev-meta",
+      "hosted by <b>"+ev.host+"</b><br>"+ev.where+" &middot; "+ev.time));
+    row.appendChild(body);
+    var r = el("div","ev-rsvp");
+    var rb = el("a","apply","RSVP ↗"); rb.href="#"; rb.setAttribute("rel","external");
+    rb.addEventListener("click", function(e){ e.preventDefault(); });
+    r.appendChild(rb);
+    row.appendChild(r);
+    evlist.appendChild(row);
+  });
+
+  // ---- view switching ----
+  var housesView = document.getElementById("houses-view");
+  var eventsView = document.getElementById("events-view");
+  var navHouses = document.getElementById("nav-houses");
+  var navEvents = document.getElementById("nav-events");
+
+  function switchView(v){
+    var houses = (v === "houses");
+    housesView.classList.toggle("hidden", !houses);
+    eventsView.style.display = houses ? "none" : "block";
+    navHouses.classList.toggle("active", houses);
+    navEvents.classList.toggle("active", !houses);
+    window.scrollTo(0,0);
+  }
+  navHouses.addEventListener("click", function(){ switchView("houses"); });
+  navEvents.addEventListener("click", function(){ switchView("events"); });
+
+  render();
+})();
+</script>
+
+</body></html>

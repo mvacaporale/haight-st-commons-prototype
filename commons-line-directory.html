@@ -1,0 +1,758 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<title>The Commons Line — Haight St Commons House Directory</title>
+<style>
+  :root {
+    /* --- grounds & ink (cool, civic — not warm cream) --- */
+    --ground: #e8e8e4;
+    --surface: #ffffff;
+    --surface-2: #f3f3ef;
+    --ink: #17191c;
+    --muted: #595d63;
+    --hair: #cfcfc8;
+    --hair-strong: #b4b4ab;
+    /* --- route (line) colors: do real work on map, bullets, filters --- */
+    --line-haight: #c3362a;   /* Haight-Ashbury */
+    --line-lower:  #0c7f63;   /* Lower Haight */
+    --line-cole:   #74489f;   /* Cole Valley */
+    --line-nopa:   #2360c4;   /* NoPa */
+    /* --- single signal color: live vacancy (departure-board amber) --- */
+    --signal: #c47400;
+    --signal-cell: #1b1d14;
+    --signal-glow: #ffb020;
+    --board: #15171b;         /* departure-board ground, both themes */
+    --board-ink: #f6f3ea;
+    --focus: #2360c4;
+    --sans: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+    --mono: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground: #101216;
+      --surface: #191c21;
+      --surface-2: #14161a;
+      --ink: #eef0ec;
+      --muted: #9aa0a6;
+      --hair: #2b2f35;
+      --hair-strong: #3a3f46;
+      --line-haight: #f0584a;
+      --line-lower:  #26c598;
+      --line-cole:   #b388e8;
+      --line-nopa:   #5f9bff;
+      --signal: #ffb020;
+      --board: #0c0d10;
+      --board-ink: #f6f3ea;
+      --focus: #7fb0ff;
+    }
+  }
+  :root[data-theme="light"] {
+    --ground: #e8e8e4; --surface: #ffffff; --surface-2: #f3f3ef;
+    --ink: #17191c; --muted: #595d63; --hair: #cfcfc8; --hair-strong: #b4b4ab;
+    --line-haight:#c3362a; --line-lower:#0c7f63; --line-cole:#74489f; --line-nopa:#2360c4;
+    --signal:#c47400; --board:#15171b; --board-ink:#f6f3ea; --focus:#2360c4;
+  }
+  :root[data-theme="dark"] {
+    --ground:#101216; --surface:#191c21; --surface-2:#14161a;
+    --ink:#eef0ec; --muted:#9aa0a6; --hair:#2b2f35; --hair-strong:#3a3f46;
+    --line-haight:#f0584a; --line-lower:#26c598; --line-cole:#b388e8; --line-nopa:#5f9bff;
+    --signal:#ffb020; --board:#0c0d10; --board-ink:#f6f3ea; --focus:#7fb0ff;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  a { color: inherit; }
+  :focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+
+  /* ---------- Top nav ---------- */
+  .topnav {
+    border-bottom: 2px solid var(--ink);
+    background: var(--surface);
+    position: sticky; top: 0; z-index: 20;
+  }
+  .topnav .wrap {
+    display: flex; align-items: center; gap: 18px;
+    min-height: 60px; flex-wrap: wrap;
+  }
+  .logo {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    border: 2px solid var(--ink);
+    padding: 5px 9px;
+    color: var(--ink);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .navlinks {
+    display: flex; gap: 2px; flex-wrap: wrap; align-items: center;
+    margin: 0; padding: 0; list-style: none;
+  }
+  .navlinks a {
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 13.5px;
+    padding: 6px 10px;
+    border-radius: 3px;
+  }
+  .navlinks a:hover { color: var(--ink); background: var(--surface-2); }
+  .navlinks a.active {
+    color: var(--ink);
+    font-weight: 700;
+    box-shadow: inset 0 -3px 0 var(--line-nopa);
+    border-radius: 0;
+  }
+  .nav-right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+  .for-houses {
+    font-size: 13px; color: var(--muted); text-decoration: none;
+    border-bottom: 1px solid var(--hair-strong); padding-bottom: 1px;
+  }
+  .for-houses:hover { color: var(--ink); border-color: var(--ink); }
+  .themebtn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em;
+    background: transparent; color: var(--muted);
+    border: 1px solid var(--hair-strong); border-radius: 3px;
+    padding: 5px 8px; cursor: pointer;
+  }
+  .themebtn:hover { color: var(--ink); border-color: var(--ink); }
+
+  /* ---------- Hero ---------- */
+  .hero { padding: 30px 0 8px; }
+  .mockmark {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+    color: var(--muted); text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: 7px; margin-bottom: 14px;
+  }
+  .mockmark::before {
+    content: ""; width: 9px; height: 9px; border-radius: 50%;
+    background: var(--signal); box-shadow: 0 0 0 3px color-mix(in srgb, var(--signal) 28%, transparent);
+  }
+  .hero h1 {
+    font-size: clamp(30px, 5.2vw, 52px);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    margin: 0 0 10px;
+    font-weight: 800;
+    text-wrap: balance;
+  }
+  .hero .sub {
+    max-width: 58ch; color: var(--muted); font-size: 16px; margin: 0 0 4px;
+  }
+
+  /* ---------- System map ---------- */
+  .map-frame {
+    margin: 20px 0 8px;
+    background: var(--surface);
+    border: 2px solid var(--ink);
+  }
+  .map-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--hair);
+    flex-wrap: wrap;
+  }
+  .map-head h2 {
+    margin: 0; font-size: 13px; font-family: var(--mono);
+    letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700;
+  }
+  .map-head .legend {
+    display: flex; gap: 14px; flex-wrap: wrap;
+    font-family: var(--mono); font-size: 11.5px; color: var(--muted);
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend i {
+    width: 14px; height: 4px; border-radius: 2px; display: inline-block;
+  }
+  .map-scroll { overflow-x: auto; }
+  svg.sysmap { display: block; width: 100%; min-width: 720px; height: auto; }
+  .sysmap .line-path { fill: none; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; transition: opacity .25s; }
+  .sysmap .stop-dot { stroke: var(--surface); stroke-width: 3; transition: opacity .25s; }
+  .sysmap .stop-label { font-family: var(--sans); font-size: 13px; font-weight: 600; fill: var(--ink); transition: opacity .25s; }
+  .sysmap .hub { fill: var(--surface); stroke: var(--ink); stroke-width: 3.5; }
+  .sysmap .hub-label { font-family: var(--mono); font-size: 11px; fill: var(--muted); letter-spacing: .04em; }
+  .sysmap .line-tag { font-family: var(--mono); font-size: 12px; font-weight: 700; }
+  @media (prefers-reduced-motion: reduce) {
+    .sysmap .line-path, .sysmap .stop-dot, .sysmap .stop-label { transition: none; }
+  }
+  .sysmap g.line-grp.dim { opacity: 0.16; }
+
+  /* ---------- Filter bar ---------- */
+  .controls { margin: 26px 0 8px; }
+  .controls .barhead {
+    display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .controls h2 {
+    margin: 0; font-size: 20px; letter-spacing: -0.01em; font-weight: 800;
+  }
+  .count {
+    font-family: var(--mono); font-size: 13px; color: var(--muted);
+  }
+  .count b { color: var(--ink); }
+  .fgroup { margin-bottom: 12px; }
+  .fgroup .flabel {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 7px;
+  }
+  .ftags { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tag {
+    font-family: var(--sans); font-size: 13px; font-weight: 600;
+    background: var(--surface); color: var(--ink);
+    border: 1.5px solid var(--hair-strong); border-radius: 4px;
+    padding: 6px 11px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+    line-height: 1;
+  }
+  .tag:hover { border-color: var(--ink); }
+  .tag .linecode {
+    font-family: var(--mono); font-size: 10.5px; font-weight: 700; color: #fff;
+    border-radius: 2px; padding: 2px 4px; letter-spacing: .03em;
+  }
+  .tag[aria-pressed="true"] {
+    border-color: var(--ink); background: var(--ink); color: var(--surface);
+  }
+  /* line tags carry their route color as a left bar + active fill */
+  .tag.line { border-left-width: 6px; }
+  .tag.line[data-tag="haight"] { border-left-color: var(--line-haight); }
+  .tag.line[data-tag="lowerhaight"] { border-left-color: var(--line-lower); }
+  .tag.line[data-tag="colevalley"] { border-left-color: var(--line-cole); }
+  .tag.line[data-tag="nopa"] { border-left-color: var(--line-nopa); }
+  .tag.line[data-tag="haight"][aria-pressed="true"] { background: var(--line-haight); border-color: var(--line-haight); color:#fff; }
+  .tag.line[data-tag="lowerhaight"][aria-pressed="true"] { background: var(--line-lower); border-color: var(--line-lower); color:#fff; }
+  .tag.line[data-tag="colevalley"][aria-pressed="true"] { background: var(--line-cole); border-color: var(--line-cole); color:#fff; }
+  .tag.line[data-tag="nopa"][aria-pressed="true"] { background: var(--line-nopa); border-color: var(--line-nopa); color:#fff; }
+  /* vacancy lead tag uses the signal color */
+  .tag.vac { border-color: var(--signal); color: var(--ink); }
+  .tag.vac::before {
+    content:""; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--signal);
+  }
+  .tag.vac[aria-pressed="true"] { background: var(--signal); border-color: var(--signal); color: #1b1200; }
+  .tag.vac[aria-pressed="true"]::before { background: #1b1200; }
+  .clearbtn {
+    background: none; border: none; color: var(--muted);
+    font-size: 12.5px; font-family: var(--mono); cursor: pointer;
+    text-decoration: underline; text-underline-offset: 3px; padding: 6px 2px;
+  }
+  .clearbtn:hover { color: var(--ink); }
+
+  /* ---------- Stop list (timetable) ---------- */
+  .stoplist {
+    border: 2px solid var(--ink); background: var(--surface);
+    margin: 10px 0 0;
+  }
+  .stop {
+    display: grid;
+    grid-template-columns: 54px 1fr auto;
+    gap: 0 16px;
+    padding: 18px 18px 18px 14px;
+    border-bottom: 1px solid var(--hair);
+    position: relative;
+  }
+  .stop:last-child { border-bottom: none; }
+  .stop.hidden { display: none; }
+
+  /* line-bullet / route tick in gutter */
+  .stop .bullet {
+    grid-row: 1 / span 3;
+    width: 40px; display: flex; flex-direction: column; align-items: center;
+  }
+  .stop .bullet .dot {
+    width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: #fff;
+    letter-spacing: .02em;
+  }
+  .stop .bullet .rail {
+    flex: 1; width: 4px; margin-top: 4px; border-radius: 2px; min-height: 10px;
+  }
+  .stop[data-hood="Haight-Ashbury"] .dot, .stop[data-hood="Haight-Ashbury"] .rail { background: var(--line-haight); }
+  .stop[data-hood="Lower Haight"] .dot, .stop[data-hood="Lower Haight"] .rail { background: var(--line-lower); }
+  .stop[data-hood="Cole Valley"] .dot, .stop[data-hood="Cole Valley"] .rail { background: var(--line-cole); }
+  .stop[data-hood="NoPa"] .dot, .stop[data-hood="NoPa"] .rail { background: var(--line-nopa); }
+
+  .stop .head { grid-column: 2; display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .stop .name { font-size: 20px; font-weight: 800; letter-spacing: -0.01em; margin: 0; }
+  .stop .hood {
+    font-family: var(--mono); font-size: 12px; color: var(--muted);
+    letter-spacing: .02em;
+  }
+  .stop .hood b { font-weight: 700; }
+  .stop[data-hood="Haight-Ashbury"] .hood b { color: var(--line-haight); }
+  .stop[data-hood="Lower Haight"] .hood b { color: var(--line-lower); }
+  .stop[data-hood="Cole Valley"] .hood b { color: var(--line-cole); }
+  .stop[data-hood="NoPa"] .hood b { color: var(--line-nopa); }
+
+  .stop .desc { grid-column: 2; color: var(--muted); font-size: 14.5px; max-width: 62ch; margin: 8px 0 0; }
+  .stop .traits { grid-column: 2; display: flex; gap: 7px; flex-wrap: wrap; margin-top: 11px; }
+  .stop .traits span {
+    font-size: 12px; color: var(--ink); background: var(--surface-2);
+    border: 1px solid var(--hair); border-radius: 3px; padding: 3px 8px;
+  }
+
+  /* right column: tabular stats + vacancy + apply */
+  .stop .meta {
+    grid-column: 3; grid-row: 1 / span 3;
+    display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+    min-width: 168px;
+  }
+  .stat-table {
+    font-family: var(--mono); font-size: 12px; color: var(--muted);
+    text-align: right; line-height: 1.7; font-variant-numeric: tabular-nums;
+  }
+  .stat-table .v { color: var(--ink); font-weight: 700; }
+  .stat-table .rent { color: var(--ink); font-weight: 700; font-size: 13px; }
+
+  /* departure-board vacancy indicator */
+  .vacancy {
+    font-family: var(--mono); font-weight: 700; font-size: 12px; letter-spacing: 0.1em;
+    background: var(--board); color: var(--signal-glow);
+    border-radius: 3px; padding: 7px 11px;
+    display: inline-flex; align-items: center; gap: 9px;
+    box-shadow: inset 0 0 0 1px rgba(255,176,32,.25);
+  }
+  .vacancy .led {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--signal-glow);
+    box-shadow: 0 0 6px 1px var(--signal-glow);
+    animation: blink 2.4s steps(1,end) infinite;
+  }
+  @keyframes blink { 0%,72%{opacity:1;} 73%,100%{opacity:.35;} }
+  @media (prefers-reduced-motion: reduce) { .vacancy .led { animation: none; } }
+  .notrecruit {
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.04em;
+    color: var(--muted); border: 1px dashed var(--hair-strong);
+    border-radius: 3px; padding: 6px 10px;
+  }
+  .apply {
+    font-size: 13px; font-weight: 700; text-decoration: none;
+    color: var(--ink); border: 1.5px solid var(--ink); border-radius: 4px;
+    padding: 7px 12px; white-space: nowrap;
+  }
+  .apply:hover { background: var(--ink); color: var(--surface); }
+  .apply::after { content: " \2197"; font-family: var(--mono); }
+  .logged { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+  .noresult {
+    padding: 40px 18px; text-align: center; color: var(--muted);
+    font-family: var(--mono); font-size: 13px; display: none;
+  }
+
+  /* ---------- Events view (timetable / departures) ---------- */
+  .view { display: none; }
+  .view.active { display: block; }
+  .events-head { margin: 30px 0 4px; }
+  .events-head h2 { font-size: clamp(26px,4vw,40px); margin: 0 0 6px; font-weight: 800; letter-spacing: -0.02em; }
+  .events-head p { color: var(--muted); margin: 0; max-width: 56ch; }
+  .board-table {
+    border: 2px solid var(--ink); background: var(--board); color: var(--board-ink);
+    margin-top: 18px;
+  }
+  .board-row {
+    display: grid;
+    grid-template-columns: 70px 1fr auto;
+    gap: 0 18px; align-items: center;
+    padding: 15px 18px;
+    border-bottom: 1px solid rgba(255,255,255,.1);
+  }
+  .board-row:last-child { border-bottom: none; }
+  .board-row.colhead {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: rgba(246,243,234,.55);
+    padding-top: 11px; padding-bottom: 11px;
+  }
+  .b-date {
+    font-family: var(--mono); text-align: center; line-height: 1;
+  }
+  .b-date .mo { font-size: 11px; letter-spacing: 0.1em; color: var(--signal-glow); }
+  .b-date .d { font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .b-main .b-title { font-size: 17px; font-weight: 700; }
+  .b-main .b-sub { font-family: var(--mono); font-size: 12px; color: rgba(246,243,234,.62); margin-top: 3px; }
+  .b-main .b-sub .ln { font-weight: 700; }
+  .b-main .b-sub .ln.haight { color: var(--line-haight); }
+  .b-main .b-sub .ln.lower { color: var(--line-lower); }
+  .b-main .b-sub .ln.cole { color: var(--line-cole); }
+  .b-main .b-sub .ln.nopa { color: var(--line-nopa); }
+  .b-right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 7px; }
+  .b-time { font-family: var(--mono); font-size: 12.5px; color: var(--board-ink); font-variant-numeric: tabular-nums; }
+  .rsvp {
+    font-family: var(--mono); font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em;
+    text-decoration: none; color: var(--board); background: var(--signal-glow);
+    border-radius: 3px; padding: 6px 11px;
+  }
+  .rsvp:hover { filter: brightness(1.08); }
+
+  /* ---------- Footer ---------- */
+  footer {
+    margin: 46px 0 0; border-top: 2px solid var(--ink);
+    background: var(--surface);
+  }
+  footer .wrap { padding: 22px 20px 40px; }
+  .colophon {
+    display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap;
+    align-items: baseline;
+  }
+  .colophon .retire {
+    font-family: var(--mono); font-size: 12px; color: var(--muted);
+  }
+  .colophon .flinks { display: flex; gap: 16px; }
+  .colophon .flinks a {
+    font-size: 13px; color: var(--muted); text-decoration: none;
+    border-bottom: 1px solid var(--hair-strong); padding-bottom: 1px;
+  }
+  .colophon .flinks a:hover { color: var(--ink); border-color: var(--ink); }
+  .footmark {
+    margin-top: 16px; font-family: var(--mono); font-size: 11px; color: var(--muted);
+    max-width: 70ch;
+  }
+
+  @media (max-width: 680px) {
+    .stop { grid-template-columns: 44px 1fr; }
+    .stop .meta { grid-column: 1 / -1; grid-row: auto; align-items: flex-start; margin-top: 14px; }
+    .stat-table { text-align: left; }
+    .board-row { grid-template-columns: 56px 1fr; }
+    .b-right { grid-column: 1 / -1; align-items: flex-start; flex-direction: row; gap: 14px; margin-top: 6px; }
+    .board-row.colhead { display: none; }
+  }
+</style>
+
+<nav class="topnav" aria-label="Primary">
+  <div class="wrap">
+    <a class="logo" href="#" aria-label="Haight Street Commons home">HSt.C</a>
+    <ul class="navlinks">
+      <li><a href="#" class="active" aria-current="page" data-view="houses">Houses</a></li>
+      <li><a href="#" data-view="events">Events</a></li>
+      <li><a href="#">Projects</a></li>
+      <li><a href="#">Slack</a></li>
+      <li><a href="#">Github</a></li>
+      <li><a href="#">Instagram</a></li>
+    </ul>
+    <div class="nav-right">
+      <a class="for-houses" href="#">For houses &rarr;</a>
+      <button class="themebtn" id="themeToggle" type="button" aria-label="Switch color theme">THEME</button>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <!-- ============ HOUSES VIEW ============ -->
+  <section class="view active" id="view-houses" aria-label="House directory">
+    <div class="hero">
+      <span class="mockmark">Mockup &middot; placeholder houses</span>
+      <h1>The Commons Line</h1>
+      <p class="sub">A network of not-for-profit co-ops and intentional communities in the heart of San Francisco. Neighborhoods are lines; houses are stops along them.</p>
+    </div>
+
+    <!-- System map -->
+    <div class="map-frame">
+      <div class="map-head">
+        <h2>System map</h2>
+        <div class="legend" id="mapLegend">
+          <span><i style="background:var(--line-haight)"></i>HA &middot; Haight-Ashbury</span>
+          <span><i style="background:var(--line-lower)"></i>LH &middot; Lower Haight</span>
+          <span><i style="background:var(--line-cole)"></i>CV &middot; Cole Valley</span>
+          <span><i style="background:var(--line-nopa)"></i>NP &middot; NoPa</span>
+        </div>
+      </div>
+      <div class="map-scroll">
+        <svg class="sysmap" viewBox="0 0 780 400" role="img" aria-labelledby="mapTitle mapDesc">
+          <title id="mapTitle">Haight Street Commons system map</title>
+          <desc id="mapDesc">A schematic transit-style diagram. Four colored lines radiate from the Panhandle interchange: the red Haight-Ashbury line with Fig House and Meridian; the green Lower Haight line with Lantern House and Tidewater; the violet Cole Valley line with Canyon House; and the blue NoPa line with The Grove.</desc>
+
+          <!-- HAIGHT-ASHBURY (red): up-left from hub -->
+          <g class="line-grp" data-line="haight">
+            <polyline class="line-path" style="stroke:var(--line-haight)" points="90,90 230,90 350,210 460,210" />
+            <circle class="stop-dot" style="fill:var(--line-haight)" cx="230" cy="90" r="8" />
+            <circle class="stop-dot" style="fill:var(--line-haight)" cx="405" cy="210" r="8" />
+            <text class="stop-label" x="230" y="76" text-anchor="middle">Fig House</text>
+            <text class="stop-label" x="405" y="196" text-anchor="middle">Meridian</text>
+            <text class="line-tag" style="fill:var(--line-haight)" x="84" y="76" text-anchor="start">HA</text>
+          </g>
+
+          <!-- LOWER HAIGHT (green): down then left from hub -->
+          <g class="line-grp" data-line="lower">
+            <polyline class="line-path" style="stroke:var(--line-lower)" points="460,210 460,310 200,310" />
+            <circle class="stop-dot" style="fill:var(--line-lower)" cx="380" cy="310" r="8" />
+            <circle class="stop-dot" style="fill:var(--line-lower)" cx="270" cy="310" r="8" />
+            <text class="stop-label" x="380" y="335" text-anchor="middle">Lantern House</text>
+            <text class="stop-label" x="250" y="335" text-anchor="middle">Tidewater</text>
+            <text class="line-tag" style="fill:var(--line-lower)" x="196" y="300" text-anchor="end">LH</text>
+          </g>
+
+          <!-- COLE VALLEY (violet): down-right diagonal -->
+          <g class="line-grp" data-line="cole">
+            <polyline class="line-path" style="stroke:var(--line-cole)" points="460,210 560,310 650,310" />
+            <circle class="stop-dot" style="fill:var(--line-cole)" cx="510" cy="260" r="8" />
+            <text class="stop-label" x="524" y="252" text-anchor="start">Canyon House</text>
+            <text class="line-tag" style="fill:var(--line-cole)" x="658" y="315" text-anchor="start">CV</text>
+          </g>
+
+          <!-- NOPA (blue): up-right diagonal -->
+          <g class="line-grp" data-line="nopa">
+            <polyline class="line-path" style="stroke:var(--line-nopa)" points="460,210 580,90 720,90" />
+            <circle class="stop-dot" style="fill:var(--line-nopa)" cx="650" cy="90" r="8" />
+            <text class="stop-label" x="650" y="76" text-anchor="middle">The Grove</text>
+            <text class="line-tag" style="fill:var(--line-nopa)" x="728" y="86" text-anchor="start">NP</text>
+          </g>
+
+          <!-- Interchange hub -->
+          <circle class="hub" cx="460" cy="210" r="13" />
+          <text class="hub-label" x="460" y="243" text-anchor="middle">Panhandle interchange</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="controls">
+      <div class="barhead">
+        <h2>Stops</h2>
+        <span class="count" id="count"></span>
+        <button class="clearbtn" id="clearBtn" type="button" hidden>clear filters</button>
+      </div>
+
+      <div class="fgroup">
+        <span class="flabel">Availability</span>
+        <div class="ftags">
+          <button class="tag vac" type="button" data-tag="available" aria-pressed="false">Vacancy now</button>
+        </div>
+      </div>
+
+      <div class="fgroup">
+        <span class="flabel">Lines &middot; neighborhoods</span>
+        <div class="ftags" id="lineTags">
+          <button class="tag line" type="button" data-tag="haight" aria-pressed="false"><span class="linecode" style="background:var(--line-haight)">HA</span>Haight-Ashbury</button>
+          <button class="tag line" type="button" data-tag="lowerhaight" aria-pressed="false"><span class="linecode" style="background:var(--line-lower)">LH</span>Lower Haight</button>
+          <button class="tag line" type="button" data-tag="colevalley" aria-pressed="false"><span class="linecode" style="background:var(--line-cole)">CV</span>Cole Valley</button>
+          <button class="tag line" type="button" data-tag="nopa" aria-pressed="false"><span class="linecode" style="background:var(--line-nopa)">NP</span>NoPa</button>
+        </div>
+      </div>
+
+      <div class="fgroup">
+        <span class="flabel">House traits</span>
+        <div class="ftags">
+          <button class="tag" type="button" data-tag="pets" aria-pressed="false">Pets</button>
+          <button class="tag" type="button" data-tag="dinner" aria-pressed="false">Weekly dinner</button>
+          <button class="tag" type="button" data-tag="intergen" aria-pressed="false">Intergenerational</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="stoplist" id="stopList"></div>
+    <div class="noresult" id="noResult">No stops match every selected tag. Try removing one.</div>
+  </section>
+
+  <!-- ============ EVENTS VIEW ============ -->
+  <section class="view" id="view-events" aria-label="Events timetable">
+    <div class="events-head">
+      <h2>Departures</h2>
+      <p>Open houses, work parties, and salons across the network. Anyone is welcome — RSVP so hosts can plan the table.</p>
+    </div>
+    <div class="board-table" id="eventBoard">
+      <div class="board-row colhead">
+        <div>Date</div>
+        <div>Event &middot; host &middot; line</div>
+        <div style="text-align:right">Time</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="colophon">
+      <span class="retire">Entries older than 45 days are retired.</span>
+      <span class="flinks">
+        <a href="#">Log in</a>
+        <a href="#">Add your house</a>
+      </span>
+    </div>
+    <p class="footmark">The Commons Line is a wayfinding mockup for the Haight Street Commons house directory. Applications are handled by each house directly; the directory only points the way.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var HOODS = {
+    "Haight-Ashbury": { code: "HA", line: "haight" },
+    "Lower Haight":   { code: "LH", line: "lower" },
+    "Cole Valley":    { code: "CV", line: "cole" },
+    "NoPa":           { code: "NP", line: "nopa" }
+  };
+
+  var HOUSES = [
+    {name:"Fig House", hood:"Haight-Ashbury", tags:["available","dinner","pets","haight"], beds:11, residents:9, rent:"$1,350–1,700", logged:"logged 6 days ago", traits:["weekly dinner","dogs & cats","consensus"], desc:"A big Victorian built around a shared table. Sunday dinners for the whole house, a garden out back, and a slow-consensus way of deciding things that newcomers either love or learn to."},
+    {name:"Canyon House", hood:"Cole Valley", tags:["dinner","intergen","colevalley"], beds:7, residents:7, rent:"$1,500–1,900", logged:"logged 3 weeks ago", traits:["intergenerational","weekly dinner","quiet"], desc:"Residents from their twenties to their sixties under one roof — quiet, book-lined, and steps from the N-Judah and the park. Open a window and you can hear the Sunday drum circle."},
+    {name:"Lantern House", hood:"Lower Haight", tags:["available","pets","lowerhaight"], beds:9, residents:8, rent:"$1,100–1,450", logged:"logged yesterday", traits:["dog-friendly","mural walls","rolling intake"], desc:"The affordable one, and proud of it. Dog-friendly, mural-covered, loud in the best way. Admits on a rolling basis rather than all at once — email if a room speaks to you."},
+    {name:"The Grove", hood:"NoPa", tags:["dinner","intergen","nopa"], beds:6, residents:6, rent:"$1,600–2,000", logged:"logged 2 weeks ago", traits:["intergenerational","Thursday dinner","garden"], desc:"Small, calm, and serious about shared meals. A standing Thursday dinner nobody misses, a seed library on the porch, and compost that could win awards."},
+    {name:"Meridian", hood:"Haight-Ashbury", tags:["available","dinner","intergen","haight"], beds:12, residents:11, rent:"$1,400–1,800", logged:"logged 4 days ago", traits:["monthly salon","woodshop","hosts newcomers"], desc:"One of the largest houses in the network and one of the oldest. Monthly salons, a working woodshop in the basement, and a long habit of taking a chance on people new to communal living."},
+    {name:"Tidewater", hood:"Lower Haight", tags:["pets","lowerhaight"], beds:8, residents:7, rent:"$1,150–1,500", logged:"logged 5 weeks ago", traits:["three cats","bikes in the hall","thrift & repair"], desc:"Co-op kitchen, bikes in the hall, three cats who run the place. Values thrift, repair, and keeping rent low enough to keep saying yes to artists and organizers."}
+  ];
+
+  var EVENTS = [
+    {mo:"OCT", d:"08", title:"Open House & Shared Dinner", host:"Fig House", where:"Haight-Ashbury", time:"Wed · 6:30 PM"},
+    {mo:"OCT", d:"12", title:"Garden Work Party", host:"Tidewater", where:"Lower Haight", time:"Sun · 10:00 AM"},
+    {mo:"OCT", d:"19", title:"Salon: On Living in Common", host:"Meridian", where:"Haight-Ashbury", time:"Sun · 7:00 PM"},
+    {mo:"OCT", d:"26", title:"Newcomer Mixer", host:"the Commons", where:"NoPa", time:"Sun · 5:00 PM"},
+    {mo:"NOV", d:"02", title:"Repair Café", host:"The Grove", where:"NoPa", time:"Sun · 1:00 PM"}
+  ];
+
+  function el(tag, cls, html) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (html != null) e.innerHTML = html;
+    return e;
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+
+  /* ---- render stops ---- */
+  var listEl = document.getElementById("stopList");
+  HOUSES.forEach(function (h) {
+    var meta = HOODS[h.hood];
+    var available = h.tags.indexOf("available") !== -1;
+    var stop = el("article", "stop");
+    stop.setAttribute("data-hood", h.hood);
+    stop.setAttribute("data-tags", h.tags.join(" "));
+
+    var vacancyHtml = available
+      ? '<div class="vacancy"><span class="led" aria-hidden="true"></span>VACANCY</div>' +
+        '<a class="apply" href="#">Apply to this house</a>'
+      : '<div class="notrecruit">Not recruiting right now</div>';
+
+    stop.innerHTML =
+      '<div class="bullet"><span class="dot">' + meta.code + '</span><span class="rail"></span></div>' +
+      '<div class="head"><h3 class="name">' + esc(h.name) + '</h3>' +
+        '<span class="hood"><b>' + meta.code + '</b> ' + esc(h.hood) + '</span></div>' +
+      '<p class="desc">' + esc(h.desc) + '</p>' +
+      '<div class="traits">' + h.traits.map(function (t) { return '<span>' + esc(t) + '</span>'; }).join("") + '</div>' +
+      '<div class="meta">' +
+        '<div class="stat-table">' +
+          '<div><span class="v">' + h.beds + '</span> bedrooms</div>' +
+          '<div><span class="v">' + h.residents + '</span> residents</div>' +
+          '<div class="rent">' + esc(h.rent) + '</div>' +
+          '<div class="logged">' + esc(h.logged) + '</div>' +
+        '</div>' +
+        vacancyHtml +
+      '</div>';
+    listEl.appendChild(stop);
+  });
+
+  /* ---- render events ---- */
+  var board = document.getElementById("eventBoard");
+  var LINECLASS = { "Haight-Ashbury": "haight", "Lower Haight": "lower", "Cole Valley": "cole", "NoPa": "nopa" };
+  EVENTS.forEach(function (ev) {
+    var row = el("div", "board-row");
+    var code = HOODS[ev.where] ? HOODS[ev.where].code : "";
+    row.innerHTML =
+      '<div class="b-date"><div class="mo">' + esc(ev.mo) + '</div><div class="d">' + esc(ev.d) + '</div></div>' +
+      '<div class="b-main"><div class="b-title">' + esc(ev.title) + '</div>' +
+        '<div class="b-sub">' + esc(ev.host) + ' &middot; <span class="ln ' + LINECLASS[ev.where] + '">' + code + '</span> ' + esc(ev.where) + '</div></div>' +
+      '<div class="b-right"><span class="b-time">' + esc(ev.time) + '</span>' +
+        '<a class="rsvp" href="#">RSVP</a></div>';
+    board.appendChild(row);
+  });
+
+  /* ---- filtering ---- */
+  var active = [];
+  var tagBtns = Array.prototype.slice.call(document.querySelectorAll(".tag"));
+  var stops = Array.prototype.slice.call(document.querySelectorAll(".stop"));
+  var lineGroups = Array.prototype.slice.call(document.querySelectorAll(".sysmap g.line-grp"));
+  var countEl = document.getElementById("count");
+  var noResult = document.getElementById("noResult");
+  var clearBtn = document.getElementById("clearBtn");
+
+  var TAG_TO_LINE = { haight: "haight", lowerhaight: "lower", colevalley: "cole", nopa: "nopa" };
+
+  function apply() {
+    var shown = 0;
+    stops.forEach(function (s) {
+      var tags = s.getAttribute("data-tags").split(" ");
+      var ok = active.every(function (t) { return tags.indexOf(t) !== -1; });
+      s.classList.toggle("hidden", !ok);
+      if (ok) shown++;
+    });
+
+    countEl.innerHTML = active.length
+      ? "<b>" + shown + "</b> of " + stops.length + " stops"
+      : "<b>" + stops.length + "</b> stops across 4 lines";
+    noResult.style.display = shown === 0 ? "block" : "none";
+    clearBtn.hidden = active.length === 0;
+
+    // dim non-selected lines on the map when any neighborhood line is active
+    var activeLines = active.map(function (t) { return TAG_TO_LINE[t]; }).filter(Boolean);
+    lineGroups.forEach(function (g) {
+      var isDim = activeLines.length > 0 && activeLines.indexOf(g.getAttribute("data-line")) === -1;
+      g.classList.toggle("dim", isDim);
+    });
+  }
+
+  tagBtns.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var t = btn.getAttribute("data-tag");
+      var i = active.indexOf(t);
+      if (i === -1) { active.push(t); btn.setAttribute("aria-pressed", "true"); }
+      else { active.splice(i, 1); btn.setAttribute("aria-pressed", "false"); }
+      apply();
+    });
+  });
+
+  clearBtn.addEventListener("click", function () {
+    active = [];
+    tagBtns.forEach(function (b) { b.setAttribute("aria-pressed", "false"); });
+    apply();
+  });
+
+  apply();
+
+  /* ---- view switching (Houses / Events) ---- */
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll(".navlinks a[data-view]"));
+  function setView(view) {
+    document.getElementById("view-houses").classList.toggle("active", view === "houses");
+    document.getElementById("view-events").classList.toggle("active", view === "events");
+    navLinks.forEach(function (a) {
+      var on = a.getAttribute("data-view") === view;
+      a.classList.toggle("active", on);
+      if (on) a.setAttribute("aria-current", "page");
+      else a.removeAttribute("aria-current");
+    });
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }
+  navLinks.forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      e.preventDefault();
+      setView(a.getAttribute("data-view"));
+    });
+  });
+
+  /* ---- theme toggle (wins over media query in both directions) ---- */
+  var root = document.documentElement;
+  var themeBtn = document.getElementById("themeToggle");
+  themeBtn.addEventListener("click", function () {
+    var current = root.getAttribute("data-theme");
+    if (!current) {
+      current = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    root.setAttribute("data-theme", current === "dark" ? "light" : "dark");
+  });
+})();
+</script>
+
+</body></html>

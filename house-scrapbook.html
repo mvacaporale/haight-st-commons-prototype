@@ -1,0 +1,545 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<title>Haight St. Commons — House Scrapbook</title>
+<style>
+  :root{
+    --paper:#f4ead3;
+    --paper-2:#efe2c4;
+    --kraft:#d9c3a0;
+    --ink:#3a3026;
+    --ink-soft:#6b5d49;
+    --rule:#c9b79a;
+    --red:#b5503f;
+    --teal:#4f7a6f;
+    --mustard:#d49a3a;
+    --plum:#7d5a73;
+    --sky:#cfe3e8;
+    --tape:rgba(214,196,120,.55);
+    --tape2:rgba(185,120,110,.45);
+    --tape3:rgba(120,150,140,.45);
+    --stitch:#b9a179;
+    --hand:"Bradley Hand","Brush Script MT","Snell Roundhand",cursive;
+    --serif:Georgia,"Iowan Old Style","Palatino Linotype",serif;
+    --mono:"Courier New",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:var(--serif);
+    line-height:1.5;
+    background-color:var(--paper);
+    background-image:
+      radial-gradient(circle at 18% 12%, rgba(255,255,255,.35), transparent 40%),
+      radial-gradient(circle at 82% 78%, rgba(160,120,70,.10), transparent 45%),
+      repeating-linear-gradient(0deg, transparent 0, transparent 27px, rgba(120,150,170,.14) 27px, rgba(120,150,170,.14) 28px),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='120' height='120' filter='url(%23n)' opacity='0.05'/></svg>");
+    overflow-x:hidden;
+  }
+  /* red margin line like a notebook */
+  body::before{
+    content:"";position:fixed;top:0;bottom:0;left:52px;width:2px;
+    background:rgba(181,80,63,.35);z-index:0;pointer-events:none;
+  }
+  @media(max-width:720px){ body::before{left:20px;} }
+
+  .wrap{max-width:1040px;margin:0 auto;padding:0 28px 80px;position:relative;z-index:1;}
+
+  /* ---------- NAV ---------- */
+  nav{
+    display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+    padding:22px 0 14px;margin-bottom:6px;
+    border-bottom:2px dashed var(--stitch);
+  }
+  .logo{
+    font-family:var(--mono);font-weight:700;font-size:20px;letter-spacing:1px;
+    color:var(--paper);background:var(--ink);
+    padding:7px 12px 6px;border-radius:3px;
+    box-shadow:2px 2px 0 rgba(58,48,38,.35);
+    transform:rotate(-2.5deg);
+    border:2px solid var(--ink);
+    position:relative;
+  }
+  .logo::after{ /* stamp speckle */
+    content:"";position:absolute;inset:0;border-radius:3px;
+    background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><filter id='s'><feTurbulence baseFrequency='0.7' numOctaves='2'/><feColorMatrix type='saturate' values='0'/></filter><rect width='40' height='40' filter='url(%23s)' opacity='0.18'/></svg>");
+    mix-blend-mode:screen;pointer-events:none;
+  }
+  .navlinks{display:flex;gap:16px;flex-wrap:wrap;align-items:baseline;}
+  .navlinks a{
+    color:var(--ink-soft);text-decoration:none;font-size:17px;
+    padding:2px 1px;border-bottom:2px solid transparent;cursor:pointer;
+    font-family:var(--serif);
+  }
+  .navlinks a:hover{color:var(--ink);border-bottom-color:var(--mustard);}
+  .navlinks a.active{
+    color:var(--red);font-style:italic;
+    border-bottom:2px solid var(--red);
+  }
+  .navlinks a.active::after{content:" ✓";font-family:var(--serif);font-size:13px;}
+  .forhouses{margin-left:auto;font-style:italic;color:var(--ink-soft);font-size:15px;cursor:pointer;text-decoration:none;}
+  .forhouses:hover{color:var(--teal);}
+  :focus-visible{outline:3px solid var(--mustard);outline-offset:2px;border-radius:2px;}
+
+  /* ---------- MASTHEAD ---------- */
+  header.mast{position:relative;padding:30px 0 10px;margin-bottom:8px;}
+  .mast h1{
+    font-family:var(--serif);font-size:clamp(34px,6vw,58px);
+    margin:0 0 4px;line-height:1.02;letter-spacing:-.5px;
+    transform:rotate(-1deg);
+  }
+  .mast h1 .amp{color:var(--red);font-style:italic;}
+  .tagline{
+    font-family:var(--hand);font-size:clamp(18px,2.6vw,24px);
+    color:var(--ink-soft);max-width:520px;transform:rotate(-.6deg);
+    margin:2px 0 0 2px;
+  }
+  .mockmark{
+    position:absolute;top:34px;right:-6px;
+    font-family:var(--mono);font-size:12px;color:var(--red);
+    border:1.5px solid var(--red);border-radius:3px;
+    padding:4px 9px;transform:rotate(5deg);
+    background:rgba(244,234,211,.7);
+  }
+  @media(max-width:620px){ .mockmark{position:static;display:inline-block;margin-top:10px;transform:rotate(-2deg);} }
+
+  /* sun doodle in corner */
+  .sun-doodle{position:absolute;top:18px;right:40px;width:70px;height:70px;opacity:.9;}
+  @media(max-width:620px){ .sun-doodle{display:none;} }
+
+  /* ---------- FILTER ---------- */
+  .filterboard{
+    position:relative;margin:26px 0 8px;padding:18px 20px 22px;
+    background:var(--paper-2);
+    border:1px solid var(--rule);
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset, 3px 4px 10px rgba(90,70,40,.12);
+  }
+  .filterboard::before{ /* washi tape top */
+    content:"";position:absolute;top:-11px;left:40px;width:96px;height:26px;
+    background:var(--tape);transform:rotate(-3deg);
+    box-shadow:0 1px 2px rgba(0,0,0,.08);
+    border-left:1px dashed rgba(120,90,40,.3);border-right:1px dashed rgba(120,90,40,.3);
+  }
+  .filterboard h2{
+    font-family:var(--hand);font-size:23px;margin:0 0 2px;color:var(--ink);
+    transform:rotate(-.8deg);
+  }
+  .filter-sub{font-style:italic;color:var(--ink-soft);font-size:14px;margin:0 0 14px;}
+  .tag-group{display:flex;flex-wrap:wrap;gap:10px 12px;align-items:center;}
+  .grp-label{font-family:var(--hand);font-size:16px;color:var(--teal);margin-right:2px;}
+  .tag{
+    font-family:var(--serif);font-size:15px;cursor:pointer;
+    border:1px solid var(--stitch);background:#fbf4e3;color:var(--ink);
+    padding:5px 12px 6px;border-radius:2px 10px 3px 9px;
+    box-shadow:1px 1px 0 rgba(120,90,40,.25);
+    transition:transform .12s ease, background .12s ease;
+    position:relative;line-height:1.1;
+  }
+  .tag:hover{transform:translateY(-1px) rotate(-1deg);}
+  .tag[aria-pressed="true"]{
+    background:var(--mustard);color:#2d2415;border-color:#9a6f20;
+    box-shadow:1px 1px 0 rgba(90,60,10,.4);
+    transform:rotate(-1.2deg);
+  }
+  .tag.lead{border:1.5px dashed var(--red);color:var(--red);font-style:italic;background:#fbeee9;}
+  .tag.lead[aria-pressed="true"]{background:var(--red);color:#fdf1ec;border-style:solid;}
+  .tag.lead::after{content:"★";margin-left:6px;font-size:12px;}
+  .filtfoot{display:flex;align-items:baseline;gap:14px;margin-top:16px;flex-wrap:wrap;}
+  .count{font-family:var(--hand);font-size:20px;color:var(--red);}
+  .count b{font-family:var(--serif);font-style:italic;}
+  .clearbtn{
+    background:none;border:none;color:var(--ink-soft);font-style:italic;
+    text-decoration:underline;cursor:pointer;font-size:14px;font-family:var(--serif);
+  }
+  .clearbtn:hover{color:var(--ink);}
+
+  /* ---------- HOUSE GRID ---------- */
+  .grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+    gap:34px 30px;margin-top:34px;
+  }
+  .card{
+    position:relative;background:#fbf5e6;
+    border:1px solid var(--rule);
+    padding:16px 18px 20px;
+    box-shadow:2px 3px 0 rgba(150,120,80,.18), 5px 8px 18px rgba(90,70,40,.14);
+  }
+  .card:nth-child(3n+1){transform:rotate(-1deg);}
+  .card:nth-child(3n+2){transform:rotate(.7deg);}
+  .card:nth-child(3n){transform:rotate(-.4deg);}
+  .card.hidden{display:none;}
+  /* washi tape corners, varied */
+  .card::before{
+    content:"";position:absolute;top:-10px;left:26px;width:74px;height:22px;
+    background:var(--tape2);transform:rotate(-5deg);
+    box-shadow:0 1px 2px rgba(0,0,0,.07);z-index:3;
+  }
+  .card:nth-child(even)::before{left:auto;right:26px;transform:rotate(6deg);background:var(--tape3);}
+
+  /* polaroid snapshot */
+  .snap{
+    background:#fffdf7;padding:9px 9px 34px;
+    border:1px solid #e3d6b8;
+    box-shadow:0 2px 5px rgba(90,70,40,.18);
+    position:relative;
+  }
+  .snap svg{display:block;width:100%;height:auto;border:1px solid #e9ddc2;}
+  .snap .capt{
+    position:absolute;left:0;right:0;bottom:7px;text-align:center;
+    font-family:var(--hand);font-size:20px;color:var(--ink);
+  }
+
+  .meta{font-style:italic;color:var(--teal);font-size:14px;margin:14px 0 2px;}
+  .meta .dot{color:var(--mustard);}
+  .stat{font-size:14px;color:var(--ink-soft);margin:2px 0 0;}
+  .rent{font-family:var(--hand);font-size:19px;color:var(--red);margin:6px 0 0;}
+  .desc{font-size:14.5px;line-height:1.5;margin:11px 0 12px;color:var(--ink);}
+
+  .traits{display:flex;flex-wrap:wrap;gap:8px 9px;margin:2px 0 14px;}
+  .trait{
+    font-family:var(--hand);font-size:15px;line-height:1;
+    background:#f2e6c9;border:1px dashed var(--stitch);color:var(--ink-soft);
+    padding:5px 9px 6px;border-radius:9px 3px 9px 3px;transform:rotate(-1deg);
+  }
+  .trait:nth-child(2n){transform:rotate(1.4deg);background:#eef0df;}
+  .trait:nth-child(3n){transform:rotate(-2deg);background:#f3e4e0;}
+
+  .logged{font-family:var(--mono);font-size:12px;color:var(--ink-soft);opacity:.85;}
+
+  /* ROOM OPEN sticky + apply */
+  .openrow{margin-top:12px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  .roomopen{
+    position:relative;display:inline-block;
+    font-family:var(--hand);font-size:19px;color:#5a2c10;
+    background:#f3c85a;padding:8px 14px 9px;
+    transform:rotate(-3deg);
+    box-shadow:2px 2px 0 rgba(120,80,10,.3);
+    border:1px solid #c99a2a;
+  }
+  .roomopen::before{ /* tape on sticky */
+    content:"";position:absolute;top:-8px;left:50%;margin-left:-20px;width:40px;height:16px;
+    background:rgba(255,255,255,.5);transform:rotate(2deg);
+  }
+  .apply{
+    font-family:var(--serif);font-style:italic;font-size:15px;color:var(--teal);
+    text-decoration:none;border-bottom:2px solid var(--teal);
+  }
+  .apply:hover{color:var(--red);border-bottom-color:var(--red);}
+  .apply .arrow{font-style:normal;}
+  .notrec{font-style:italic;color:var(--ink-soft);font-size:14px;margin-top:12px;opacity:.9;}
+  .notrec::before{content:"~ ";}
+
+  .empty{
+    grid-column:1/-1;text-align:center;font-family:var(--hand);
+    font-size:22px;color:var(--ink-soft);padding:50px 10px;
+  }
+
+  /* ---------- EVENTS ---------- */
+  #events-view{display:none;}
+  .cal-head{position:relative;margin:30px 0 20px;}
+  .cal-head h2{font-family:var(--serif);font-style:italic;font-size:34px;margin:0;transform:rotate(-.8deg);}
+  .cal-head p{font-family:var(--hand);font-size:19px;color:var(--ink-soft);margin:4px 0 0;}
+  .events-list{display:flex;flex-direction:column;gap:16px;max-width:720px;}
+  .ev{
+    display:flex;gap:18px;align-items:flex-start;
+    background:#fbf5e6;border:1px solid var(--rule);
+    padding:14px 18px 15px;position:relative;
+    box-shadow:2px 3px 0 rgba(150,120,80,.15);
+  }
+  .ev:nth-child(odd){transform:rotate(-.5deg);}
+  .ev:nth-child(even){transform:rotate(.5deg);}
+  .ev .date{
+    flex:0 0 auto;text-align:center;width:64px;
+    border:1.5px solid var(--red);border-radius:4px;padding:6px 4px 7px;
+    background:#fbeee9;transform:rotate(-2deg);
+  }
+  .ev .date .mo{font-family:var(--mono);font-size:12px;color:var(--red);letter-spacing:1px;display:block;}
+  .ev .date .d{font-family:var(--serif);font-weight:700;font-size:26px;color:var(--ink);line-height:1;}
+  .ev .body h3{margin:0 0 3px;font-size:20px;font-style:italic;}
+  .ev .body .who{font-family:var(--hand);font-size:17px;color:var(--teal);}
+  .ev .body .when{font-size:13.5px;color:var(--ink-soft);margin-top:3px;}
+  .rsvp{
+    margin-left:auto;align-self:center;white-space:nowrap;
+    font-family:var(--serif);font-style:italic;color:var(--red);
+    text-decoration:none;border:1px dashed var(--red);border-radius:3px;
+    padding:5px 11px;
+  }
+  .rsvp:hover{background:var(--red);color:#fdf1ec;}
+  @media(max-width:520px){ .ev{flex-wrap:wrap;} .rsvp{margin-left:0;} }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    margin-top:60px;padding-top:22px;border-top:2px dashed var(--stitch);
+    display:flex;gap:16px;flex-wrap:wrap;align-items:center;
+    font-size:14px;color:var(--ink-soft);
+  }
+  footer .colophon{font-style:italic;}
+  footer .plant{width:40px;height:52px;flex:0 0 auto;}
+  footer .links{margin-left:auto;display:flex;gap:16px;}
+  footer .links a{color:var(--ink-soft);font-style:italic;text-decoration:underline;cursor:pointer;}
+  footer .links a:hover{color:var(--teal);}
+
+  @media(prefers-reduced-motion:reduce){
+    .card,.ev,.tag,.roomopen,.logo,.mast h1,.tagline,.cal-head h2,.ev .date,.trait{transform:none!important;}
+    .tag:hover{transform:none!important;}
+    *{transition:none!important;animation:none!important;}
+  }
+</style>
+
+<div class="wrap">
+  <nav>
+    <span class="logo" aria-label="Haight Street Commons">HSt.C</span>
+    <div class="navlinks">
+      <a id="nav-houses" class="active" role="button" tabindex="0">Houses</a>
+      <a id="nav-events" role="button" tabindex="0">Events</a>
+      <a href="#" tabindex="0">Projects</a>
+      <a href="#" tabindex="0">Slack</a>
+      <a href="#" tabindex="0">Github</a>
+      <a href="#" tabindex="0">Instagram</a>
+    </div>
+    <a class="forhouses" href="#" tabindex="0">For houses &rarr;</a>
+  </nav>
+
+  <!-- ================= HOUSES VIEW ================= -->
+  <div id="houses-view">
+    <header class="mast">
+      <svg class="sun-doodle" viewBox="0 0 80 80" aria-hidden="true">
+        <g fill="none" stroke="#d49a3a" stroke-width="2.4" stroke-linecap="round">
+          <circle cx="40" cy="40" r="15" fill="#f3c85a" stroke="#c99a2a"/>
+          <line x1="40" y1="8" x2="40" y2="18"/><line x1="40" y1="62" x2="40" y2="72"/>
+          <line x1="8" y1="40" x2="18" y2="40"/><line x1="62" y1="40" x2="72" y2="40"/>
+          <line x1="17" y1="17" x2="24" y2="24"/><line x1="56" y1="56" x2="63" y2="63"/>
+          <line x1="63" y1="17" x2="56" y2="24"/><line x1="24" y1="56" x2="17" y2="63"/>
+        </g>
+      </svg>
+      <h1>The House Scrapbook <span class="amp">&amp;</span><br>Directory</h1>
+      <p class="tagline">A network of not-for-profit co-ops and intentional communities in the heart of San Francisco.</p>
+      <span class="mockmark">Mockup &middot; placeholder houses</span>
+    </header>
+
+    <section class="filterboard" aria-label="Filter houses by tag">
+      <h2>What are you looking for?</h2>
+      <p class="filter-sub">Press a few labels &mdash; they stack, so you'll see houses that match <em>all</em> of them.</p>
+
+      <div class="tag-group">
+        <span class="grp-label">right now &mdash;</span>
+        <button class="tag lead" data-tag="available" aria-pressed="false">Vacancy now</button>
+        <button class="tag" data-tag="dinner" aria-pressed="false">weekly dinner</button>
+        <button class="tag" data-tag="pets" aria-pressed="false">pets welcome</button>
+        <button class="tag" data-tag="intergen" aria-pressed="false">intergenerational</button>
+      </div>
+      <div class="tag-group" style="margin-top:14px;">
+        <span class="grp-label">around &mdash;</span>
+        <button class="tag" data-tag="haight" aria-pressed="false">Haight-Ashbury</button>
+        <button class="tag" data-tag="lowerhaight" aria-pressed="false">Lower Haight</button>
+        <button class="tag" data-tag="colevalley" aria-pressed="false">Cole Valley</button>
+        <button class="tag" data-tag="nopa" aria-pressed="false">NoPa</button>
+      </div>
+
+      <div class="filtfoot">
+        <span class="count" id="count" aria-live="polite"></span>
+        <button class="clearbtn" id="clear" type="button">start over</button>
+      </div>
+    </section>
+
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <!-- ================= EVENTS VIEW ================= -->
+  <div id="events-view">
+    <div class="cal-head">
+      <h2>On the house calendar</h2>
+      <p>potluck, patch a chair, argue about books &mdash; everyone's welcome</p>
+    </div>
+    <div class="events-list" id="events-list"></div>
+  </div>
+
+  <footer>
+    <svg class="plant" viewBox="0 0 40 52" aria-hidden="true">
+      <path d="M20 50 L20 26" stroke="#4f7a6f" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+      <path d="M20 34 C10 32 6 22 8 16 C16 18 21 26 20 34 Z" fill="#6b9a7f" stroke="#4f7a6f" stroke-width="1.4"/>
+      <path d="M20 30 C30 28 34 18 32 12 C24 14 19 22 20 30 Z" fill="#7faf90" stroke="#4f7a6f" stroke-width="1.4"/>
+      <path d="M12 50 L28 50 L26 44 L14 44 Z" fill="#b5503f" stroke="#8a3c2d" stroke-width="1.4"/>
+    </svg>
+    <span class="colophon">Kept by the houses. Entries older than 45 days are quietly retired.</span>
+    <span class="links">
+      <a href="#" tabindex="0">Log in</a>
+      <a href="#" tabindex="0">Add your house</a>
+    </span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var HOUSES=[
+    {name:"Fig House",hood:"Haight-Ashbury",tags:["available","dinner","pets","haight"],beds:11,residents:9,rent:"$1,350–1,700",logged:"logged 6 days ago",traits:["weekly dinner","dogs & cats","consensus"],desc:"A big Victorian built around a shared table. Sunday dinners for the whole house, a garden out back, and a slow-consensus way of deciding things that newcomers either love or learn to."},
+    {name:"Canyon House",hood:"Cole Valley",tags:["dinner","intergen","colevalley"],beds:7,residents:7,rent:"$1,500–1,900",logged:"logged 3 weeks ago",traits:["intergenerational","weekly dinner","quiet"],desc:"Residents from their twenties to their sixties under one roof — quiet, book-lined, and steps from the N-Judah and the park. Open a window and you can hear the Sunday drum circle."},
+    {name:"Lantern House",hood:"Lower Haight",tags:["available","pets","lowerhaight"],beds:9,residents:8,rent:"$1,100–1,450",logged:"logged yesterday",traits:["dog-friendly","mural walls","rolling intake"],desc:"The affordable one, and proud of it. Dog-friendly, mural-covered, loud in the best way. Admits on a rolling basis rather than all at once — email if a room speaks to you."},
+    {name:"The Grove",hood:"NoPa",tags:["dinner","intergen","nopa"],beds:6,residents:6,rent:"$1,600–2,000",logged:"logged 2 weeks ago",traits:["intergenerational","Thursday dinner","garden"],desc:"Small, calm, and serious about shared meals. A standing Thursday dinner nobody misses, a seed library on the porch, and compost that could win awards."},
+    {name:"Meridian",hood:"Haight-Ashbury",tags:["available","dinner","intergen","haight"],beds:12,residents:11,rent:"$1,400–1,800",logged:"logged 4 days ago",traits:["monthly salon","woodshop","hosts newcomers"],desc:"One of the largest houses in the network and one of the oldest. Monthly salons, a working woodshop in the basement, and a long habit of taking a chance on people new to communal living."},
+    {name:"Tidewater",hood:"Lower Haight",tags:["pets","lowerhaight"],beds:8,residents:7,rent:"$1,150–1,500",logged:"logged 5 weeks ago",traits:["three cats","bikes in the hall","thrift & repair"],desc:"Co-op kitchen, bikes in the hall, three cats who run the place. Values thrift, repair, and keeping rent low enough to keep saying yes to artists and organizers."}
+  ];
+  var EVENTS=[
+    {mo:"OCT",d:"08",title:"Open House & Shared Dinner",host:"Fig House",where:"Haight-Ashbury",time:"Wed · 6:30 PM"},
+    {mo:"OCT",d:"12",title:"Garden Work Party",host:"Tidewater",where:"Lower Haight",time:"Sun · 10:00 AM"},
+    {mo:"OCT",d:"19",title:"Salon: On Living in Common",host:"Meridian",where:"Haight-Ashbury",time:"Sun · 7:00 PM"},
+    {mo:"OCT",d:"26",title:"Newcomer Mixer",host:"the Commons",where:"NoPa",time:"Sun · 5:00 PM"},
+    {mo:"NOV",d:"02",title:"Repair Café",host:"The Grove",where:"NoPa",time:"Sun · 1:00 PM"}
+  ];
+
+  // --- hand-drawn snapshot scenes; varied per house index ---
+  var PALS=[
+    {sky:"#d7e7e0",body:"#e9c98f",roof:"#b5503f",orn:"sun"},
+    {sky:"#e3dcea",body:"#dcc3b0",roof:"#7d5a73",orn:"moon"},
+    {sky:"#f0e2c4",body:"#d8b7a0",roof:"#c97a3a",orn:"cat"},
+    {sky:"#dbe8d6",body:"#cdd7a8",roof:"#4f7a6f",orn:"tree"},
+    {sky:"#e8ddc0",body:"#e0c694",roof:"#9a6b3f",orn:"bird"},
+    {sky:"#d4e3e7",body:"#c8c0a8",roof:"#5f7d8a",orn:"cat"}
+  ];
+  function ornament(kind){
+    if(kind==="sun") return '<g stroke="#c99a2a" stroke-width="2" fill="#f3c85a" stroke-linecap="round"><circle cx="212" cy="34" r="12"/><line x1="212" y1="14" x2="212" y2="6"/><line x1="192" y1="34" x2="184" y2="34"/><line x1="198" y1="20" x2="192" y2="14"/></g>';
+    if(kind==="moon") return '<path d="M214 22 a14 14 0 1 0 6 26 a11 11 0 1 1 -6 -26 Z" fill="#f2ecc9" stroke="#b8a46a" stroke-width="1.6"/>';
+    if(kind==="tree") return '<g><rect x="202" y="40" width="5" height="22" fill="#8a6a3f"/><circle cx="204.5" cy="34" r="16" fill="#6b9a7f" stroke="#4f7a6f" stroke-width="1.6"/></g>';
+    if(kind==="bird") return '<path d="M186 30 q8 -8 16 0 q8 -8 16 0" fill="none" stroke="#5a4a36" stroke-width="2.2" stroke-linecap="round"/>';
+    if(kind==="cat") return '<g stroke="#4a3d2d" stroke-width="2" fill="#4a3d2d"><path d="M196 60 l0 -14 l4 6 l4 -8 l4 8 l4 -6 l0 14 Z"/><path d="M212 54 q8 2 10 8" fill="none" stroke-linecap="round"/></g>';
+    return "";
+  }
+  function scene(i){
+    var p=PALS[i%PALS.length];
+    return '<svg viewBox="0 0 230 150" role="img" aria-label="hand-drawn house">'
+      +'<rect width="230" height="150" fill="'+p.sky+'"/>'
+      +'<rect x="0" y="118" width="230" height="32" fill="#cdbf98"/>'        // ground
+      +ornament(p.orn)
+      // house body
+      +'<rect x="58" y="66" width="104" height="58" fill="'+p.body+'" stroke="#6b5338" stroke-width="2.4"/>'
+      // roof
+      +'<path d="M50 68 L110 34 L170 68 Z" fill="'+p.roof+'" stroke="#5a3b2d" stroke-width="2.4" stroke-linejoin="round"/>'
+      // chimney
+      +'<rect x="140" y="42" width="12" height="18" fill="'+p.roof+'" stroke="#5a3b2d" stroke-width="2"/>'
+      // door
+      +'<rect x="98" y="92" width="24" height="32" fill="#8a5a3c" stroke="#5a3b2d" stroke-width="2"/>'
+      +'<circle cx="117" cy="108" r="1.8" fill="#f3e4c0"/>'
+      // windows
+      +'<rect x="68" y="78" width="20" height="20" fill="#f3efd6" stroke="#5a3b2d" stroke-width="2"/>'
+      +'<line x1="78" y1="78" x2="78" y2="98" stroke="#5a3b2d" stroke-width="1.4"/>'
+      +'<line x1="68" y1="88" x2="88" y2="88" stroke="#5a3b2d" stroke-width="1.4"/>'
+      +'<rect x="132" y="78" width="20" height="20" fill="#f3efd6" stroke="#5a3b2d" stroke-width="2"/>'
+      +'<line x1="142" y1="78" x2="142" y2="98" stroke="#5a3b2d" stroke-width="1.4"/>'
+      +'<line x1="132" y1="88" x2="152" y2="88" stroke="#5a3b2d" stroke-width="1.4"/>'
+      // little bush
+      +'<circle cx="40" cy="124" r="9" fill="#6b9a7f" stroke="#4f7a6f" stroke-width="1.6"/>'
+      +'<circle cx="190" cy="126" r="7" fill="#7faf90" stroke="#4f7a6f" stroke-width="1.6"/>'
+      +'</svg>';
+  }
+
+  var active={};
+  var grid=document.getElementById("grid");
+  var countEl=document.getElementById("count");
+
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});}
+
+  function buildCards(){
+    grid.innerHTML="";
+    HOUSES.forEach(function(h,i){
+      var open=h.tags.indexOf("available")>-1;
+      var traits=h.traits.map(function(t){return '<span class="trait">'+esc(t)+'</span>';}).join("");
+      var openBlock=open
+        ? '<div class="openrow"><span class="roomopen">Room open!</span>'
+          +'<a class="apply" href="#" tabindex="0">Apply to this house <span class="arrow">&rarr;</span></a></div>'
+        : '<p class="notrec">not recruiting right now</p>';
+      var card=document.createElement("article");
+      card.className="card";
+      card.setAttribute("data-tags",h.tags.join(" "));
+      card.innerHTML=
+        '<div class="snap">'+scene(i)+'<span class="capt">'+esc(h.name)+'</span></div>'
+        +'<p class="meta">'+esc(h.hood)+' <span class="dot">&bull;</span> '+h.beds+' bedrooms '
+          +'<span class="dot">&bull;</span> '+h.residents+' residents</p>'
+        +'<p class="rent">'+esc(h.rent)+' / room</p>'
+        +'<p class="desc">'+esc(h.desc)+'</p>'
+        +'<div class="traits">'+traits+'</div>'
+        +'<p class="logged">'+esc(h.logged)+'</p>'
+        +openBlock;
+      grid.appendChild(card);
+    });
+  }
+
+  function applyFilter(){
+    var on=Object.keys(active).filter(function(k){return active[k];});
+    var cards=grid.querySelectorAll(".card");
+    var shown=0;
+    cards.forEach(function(c){
+      var ct=c.getAttribute("data-tags").split(" ");
+      var ok=on.every(function(t){return ct.indexOf(t)>-1;});
+      c.classList.toggle("hidden",!ok);
+      if(ok)shown++;
+    });
+    var old=grid.querySelector(".empty");
+    if(old)old.remove();
+    if(shown===0){
+      var e=document.createElement("p");
+      e.className="empty";
+      e.textContent="No house matches all of those — try lifting a label.";
+      grid.appendChild(e);
+    }
+    var total=HOUSES.length;
+    if(on.length===0){
+      countEl.innerHTML="all <b>"+total+"</b> houses in the book";
+    }else{
+      countEl.innerHTML="<b>"+shown+"</b> of "+total+" match";
+    }
+  }
+
+  document.querySelectorAll(".tag").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      var t=btn.getAttribute("data-tag");
+      active[t]=!active[t];
+      btn.setAttribute("aria-pressed",active[t]?"true":"false");
+      applyFilter();
+    });
+  });
+  document.getElementById("clear").addEventListener("click",function(){
+    active={};
+    document.querySelectorAll(".tag").forEach(function(b){b.setAttribute("aria-pressed","false");});
+    applyFilter();
+  });
+
+  // events
+  var evWrap=document.getElementById("events-list");
+  EVENTS.forEach(function(e){
+    var row=document.createElement("div");
+    row.className="ev";
+    row.innerHTML=
+      '<div class="date"><span class="mo">'+esc(e.mo)+'</span><span class="d">'+esc(e.d)+'</span></div>'
+      +'<div class="body"><h3>'+esc(e.title)+'</h3>'
+      +'<div class="who">hosted by '+esc(e.host)+' &middot; '+esc(e.where)+'</div>'
+      +'<div class="when">'+esc(e.time)+'</div></div>'
+      +'<a class="rsvp" href="#" tabindex="0">RSVP</a>';
+    evWrap.appendChild(row);
+  });
+
+  // view switching
+  var housesView=document.getElementById("houses-view");
+  var eventsView=document.getElementById("events-view");
+  var navHouses=document.getElementById("nav-houses");
+  var navEvents=document.getElementById("nav-events");
+  function show(view){
+    var h=view==="houses";
+    housesView.style.display=h?"":"none";
+    eventsView.style.display=h?"none":"";
+    navHouses.classList.toggle("active",h);
+    navEvents.classList.toggle("active",!h);
+    window.scrollTo(0,0);
+  }
+  function bind(el,fn){
+    el.addEventListener("click",function(ev){ev.preventDefault();fn();});
+    el.addEventListener("keydown",function(ev){if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();fn();}});
+  }
+  bind(navHouses,function(){show("houses");});
+  bind(navEvents,function(){show("events");});
+
+  buildCards();
+  applyFilter();
+})();
+</script>
+
+</body></html>

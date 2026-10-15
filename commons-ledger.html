@@ -1,0 +1,456 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<title>The Commons Ledger — Haight St Commons (Mockup)</title>
+<style>
+  /* ============================================================
+     THE COMMONS LEDGER  ·  v2
+     A shared document the co-op network keeps — not a marketplace.
+     System fonts only (CSP blocks webfonts). CSS/SVG only (no assets).
+     ============================================================ */
+  :root {
+    /* --- brand: the masthead/nav is always the real HSt.C teal --- */
+    --teal: #1c2b2a;
+    --teal-ink: #0f1817;
+    --teal-link: #a2b4ae;
+    --teal-link-hi: #f3f1ea;
+
+    /* --- light = warm newsprint paper --- */
+    --paper: #f1ece0;
+    --paper-raised: #f8f4ea;
+    --ink: #211c14;          /* warm near-black */
+    --ink-soft: #5a5243;
+    --faint: #8c8373;
+    --rule: #d6ccb8;         /* hairline between entries */
+    --grid-ink: #c7bda6;     /* faint street-grid strokes */
+    --stamp: #b23a28;        /* faded stamp red — vacancy ONLY */
+
+    --serif: Georgia, "Iowan Old Style", "Times New Roman", "Times", serif;
+    --sans: "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+    --mono: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #16120c;
+      --paper-raised: #1d1710;
+      --ink: #ece3d2;
+      --ink-soft: #b4a98f;
+      --faint: #7d7362;
+      --rule: #342b1f;
+      --grid-ink: #33291b;
+      --stamp: #df6952;
+    }
+  }
+  :root[data-theme="light"] {
+    --paper: #f1ece0; --paper-raised: #f8f4ea; --ink: #211c14; --ink-soft: #5a5243;
+    --faint: #8c8373; --rule: #d6ccb8; --grid-ink: #c7bda6; --stamp: #b23a28;
+  }
+  :root[data-theme="dark"] {
+    --paper: #16120c; --paper-raised: #1d1710; --ink: #ece3d2; --ink-soft: #b4a98f;
+    --faint: #7d7362; --rule: #342b1f; --grid-ink: #33291b; --stamp: #df6952;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--sans); line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* paper grain + faint street grid, behind everything, inert */
+  .texture {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    opacity: .5; mix-blend-mode: multiply;
+  }
+  @media (prefers-color-scheme: dark) { .texture { mix-blend-mode: screen; opacity: .4; } }
+  :root[data-theme="dark"] .texture { mix-blend-mode: screen; opacity: .4; }
+  :root[data-theme="light"] .texture { mix-blend-mode: multiply; opacity: .5; }
+  .streetgrid {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .5;
+  }
+  .streetgrid line, .streetgrid rect, .streetgrid path {
+    stroke: var(--grid-ink); fill: none; vector-effect: non-scaling-stroke;
+  }
+
+  /* ---------------- NAV (authentic teal masthead bar) ---------------- */
+  header.nav {
+    position: sticky; top: 0; z-index: 40;
+    background: var(--teal); border-bottom: 1px solid var(--teal-ink);
+  }
+  .nav-inner {
+    max-width: 1000px; margin: 0 auto; padding: 13px 28px;
+    display: flex; align-items: center; gap: 26px;
+  }
+  .logo {
+    font-family: var(--mono); font-weight: 700; font-size: 19px; color: #fff;
+    letter-spacing: -0.5px; border: 2px solid #fff; border-radius: 7px;
+    padding: 5px 11px; line-height: 1; white-space: nowrap;
+  }
+  nav.links { display: flex; gap: 20px; align-items: center; flex: 1; }
+  nav.links a {
+    font-size: 14.5px; color: var(--teal-link); text-decoration: none;
+    font-weight: 500; cursor: pointer; padding: 3px 0;
+    border-bottom: 2px solid transparent;
+  }
+  nav.links a:hover { color: var(--teal-link-hi); }
+  nav.links a.active { color: #fff; border-bottom-color: var(--stamp); }
+  nav.links a:focus-visible { outline: 2px solid #fff; outline-offset: 3px; border-radius: 2px; }
+  .nav-right { display: flex; align-items: center; gap: 16px; }
+  .for-houses { font-size: 14px; color: var(--teal-link); text-decoration: none; }
+  .for-houses:hover { color: #fff; text-decoration: underline; }
+  .theme-toggle {
+    background: transparent; border: 1px solid #39534f; color: var(--teal-link);
+    width: 32px; height: 32px; border-radius: 6px; cursor: pointer; font-size: 14px;
+    display: grid; place-items: center;
+  }
+  .theme-toggle:hover { color: #fff; border-color: #607d79; }
+
+  /* ---------------- SHELL ---------------- */
+  main { position: relative; z-index: 1; max-width: 1000px; margin: 0 auto; padding: 0 28px 72px; }
+
+  /* ---------------- MASTHEAD ---------------- */
+  .masthead { padding: 52px 0 30px; text-align: center; position: relative; }
+  .masthead .dateline {
+    font-family: var(--mono); font-size: 12px; color: var(--ink-soft);
+    letter-spacing: .04em; margin: 0 0 16px;
+  }
+  .masthead h1 {
+    font-family: var(--serif); font-weight: 700; font-style: normal;
+    font-size: clamp(38px, 7vw, 68px); line-height: .98; letter-spacing: -0.01em;
+    margin: 0 auto 18px; max-width: 14ch; text-wrap: balance; color: var(--ink);
+  }
+  .masthead .standfirst {
+    font-family: var(--serif); font-size: clamp(17px, 2.3vw, 20px); font-style: italic;
+    color: var(--ink-soft); max-width: 54ch; margin: 0 auto; line-height: 1.5;
+  }
+  .rule-heavy { border: 0; border-top: 2px solid var(--ink); margin: 30px 0 0; }
+  .rule-thin  { border: 0; border-top: 1px solid var(--rule); }
+
+  /* ---------------- FILTER STRIP (ledger control, not pills) ---------------- */
+  .filterbar {
+    position: sticky; top: 59px; z-index: 30;
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--rule);
+    padding: 13px 0; margin-bottom: 8px;
+    display: flex; align-items: baseline; gap: 18px; flex-wrap: wrap;
+  }
+  .filterbar .lbl {
+    font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--ink-soft);
+    white-space: nowrap;
+  }
+  .filters { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; flex: 1; }
+  .filt {
+    font-family: var(--sans); font-size: 14px; color: var(--ink-soft);
+    background: none; border: 0; border-bottom: 2px solid transparent;
+    padding: 2px 1px; cursor: pointer; letter-spacing: .01em;
+  }
+  .filt:hover { color: var(--ink); }
+  .filt[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--ink); font-weight: 600; }
+  .filt.vac { font-family: var(--mono); font-size: 12.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--stamp); }
+  .filt.vac[aria-pressed="true"] { border-bottom-color: var(--stamp); color: var(--stamp); font-weight: 700; }
+  .sep { color: var(--rule); user-select: none; }
+  .tally { font-family: var(--mono); font-size: 12px; color: var(--faint); white-space: nowrap; }
+  .tally b { color: var(--ink); }
+
+  /* ---------------- LEDGER ENTRIES ---------------- */
+  .ledger { display: flex; flex-direction: column; }
+  .entry {
+    display: grid; grid-template-columns: 76px 1fr; gap: 26px;
+    padding: 30px 0; border-bottom: 1px solid var(--rule); align-items: start;
+  }
+  .entry:first-of-type { border-top: 1px solid var(--rule); }
+  .idx {
+    font-family: var(--mono); font-size: 13px; color: var(--faint);
+    padding-top: 10px; line-height: 1.3;
+  }
+  .idx b { display: block; font-size: 26px; color: var(--ink); font-weight: 400; letter-spacing: -0.02em; }
+  .entry-main { min-width: 0; }
+  .entry-head { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  .h-name {
+    font-family: var(--serif); font-weight: 700; font-size: clamp(25px, 3.6vw, 34px);
+    line-height: 1.04; letter-spacing: -0.01em; margin: 0; color: var(--ink);
+  }
+  /* rubber-stamp VACANCY — rotated, outlined, slightly misregistered */
+  .stamp {
+    font-family: var(--mono); font-size: 13px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .14em; color: var(--stamp);
+    border: 2px solid var(--stamp); border-radius: 3px; padding: 4px 9px 3px;
+    transform: rotate(-4.5deg); display: inline-block;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--stamp) 35%, transparent);
+    opacity: .9;
+  }
+  .meta-line {
+    font-family: var(--mono); font-size: 13px; color: var(--ink-soft);
+    margin: 11px 0 0; letter-spacing: .01em; font-variant-numeric: tabular-nums;
+  }
+  .meta-line .rent { color: var(--ink); }
+  .desc {
+    font-family: var(--serif); font-size: 17px; line-height: 1.58; color: var(--ink);
+    margin: 13px 0 0; max-width: 64ch;
+  }
+  .entry-foot {
+    display: flex; align-items: baseline; gap: 10px 20px; flex-wrap: wrap;
+    margin-top: 15px;
+  }
+  .traits { font-size: 13.5px; color: var(--ink-soft); }
+  .traits .d { color: var(--rule); margin: 0 7px; }
+  .logged { font-family: var(--mono); font-size: 11.5px; color: var(--faint); }
+  .apply {
+    font-family: var(--sans); font-size: 14px; font-weight: 600; color: var(--stamp);
+    text-decoration: none; margin-left: auto; border-bottom: 1.5px solid currentColor;
+    padding-bottom: 1px;
+  }
+  .apply:hover { color: var(--ink); }
+  .closed { font-family: var(--sans); font-size: 13px; color: var(--faint); margin-left: auto; font-style: italic; }
+  .editable { font-family: var(--mono); font-size: 11px; color: var(--faint); }
+
+  .empty { display: none; padding: 54px 0; text-align: center; font-family: var(--serif); font-style: italic; font-size: 18px; color: var(--ink-soft); }
+
+  /* ---------------- EVENTS VIEW ---------------- */
+  #view-events { display: none; }
+  .ev {
+    display: grid; grid-template-columns: 76px 1fr auto; gap: 26px; align-items: baseline;
+    padding: 26px 0; border-bottom: 1px solid var(--rule);
+  }
+  .ev:first-of-type { border-top: 1px solid var(--rule); }
+  .ev .when { font-family: var(--mono); font-size: 13px; color: var(--faint); padding-top: 4px; }
+  .ev .when b { display: block; font-size: 24px; color: var(--ink); font-weight: 400; letter-spacing: -0.02em; }
+  .ev h3 { font-family: var(--serif); font-weight: 700; font-size: 21px; margin: 0 0 5px; color: var(--ink); }
+  .ev p { margin: 0; font-size: 14px; color: var(--ink-soft); }
+  .ev .time { font-family: var(--mono); font-size: 12.5px; color: var(--ink-soft); text-align: right; white-space: nowrap; }
+  .ev .time a { display: block; color: var(--stamp); text-decoration: none; margin-top: 4px; }
+  .ev .time a:hover { text-decoration: underline; }
+
+  /* ---------------- COLOPHON ---------------- */
+  .colophon {
+    margin-top: 48px; padding-top: 22px; border-top: 2px solid var(--ink);
+    font-family: var(--mono); font-size: 12px; color: var(--ink-soft);
+    display: flex; flex-wrap: wrap; gap: 6px 20px; line-height: 1.7;
+  }
+  .colophon a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--rule); }
+  .colophon a:hover { border-bottom-color: var(--ink); }
+  .colophon .mock { color: var(--faint); margin-left: auto; }
+
+  @media (max-width: 680px) {
+    .nav-inner { flex-wrap: wrap; gap: 12px 18px; }
+    nav.links { order: 3; flex-basis: 100%; overflow-x: auto; gap: 16px; }
+    .entry { grid-template-columns: 1fr; gap: 6px; }
+    .idx { padding-top: 0; }
+    .idx b { display: inline; font-size: 15px; }
+    .ev { grid-template-columns: 56px 1fr; }
+    .ev .time { grid-column: 2; text-align: left; margin-top: 6px; }
+    .apply, .closed { margin-left: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+
+<!-- paper grain -->
+<svg class="texture" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/>
+    <feColorMatrix type="saturate" values="0"/></filter>
+  <rect width="100%" height="100%" filter="url(#grain)" opacity="0.35"/>
+</svg>
+<!-- faint Haight / Panhandle street grid -->
+<svg class="streetgrid" aria-hidden="true" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMin slice">
+  <!-- Panhandle -->
+  <rect x="120" y="250" width="640" height="46" rx="23"/>
+  <!-- Haight St + parallels running across -->
+  <line x1="0" y1="190" x2="1000" y2="196"/>
+  <line x1="0" y1="340" x2="1000" y2="346"/>
+  <line x1="0" y1="420" x2="1000" y2="428"/>
+  <line x1="0" y1="500" x2="1000" y2="510"/>
+  <!-- cross streets (Masonic / Ashbury / Clayton / Cole / Stanyan …) -->
+  <line x1="180" y1="120" x2="188" y2="620"/>
+  <line x1="320" y1="120" x2="328" y2="620"/>
+  <line x1="470" y1="120" x2="478" y2="620"/>
+  <line x1="620" y1="120" x2="628" y2="620"/>
+  <line x1="770" y1="120" x2="778" y2="620"/>
+  <!-- the park edge, lower -->
+  <path d="M60 560 Q 400 600 980 575"/>
+</svg>
+
+<header class="nav">
+  <div class="nav-inner">
+    <span class="logo">HSt.C</span>
+    <nav class="links" aria-label="Primary">
+      <a data-view="houses" class="active">Houses</a>
+      <a data-view="events">Events</a>
+      <a>Projects</a>
+      <a>Slack</a>
+      <a>Github</a>
+      <a>Instagram</a>
+    </nav>
+    <div class="nav-right">
+      <a class="for-houses">For houses →</a>
+      <button class="theme-toggle" id="themeBtn" aria-label="Toggle light / dark" title="Toggle light / dark">◐</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ================= HOUSES ================= -->
+  <section id="view-houses">
+    <div class="masthead">
+      <p class="dateline" id="dateline">San Francisco · A living roster, kept by its houses</p>
+      <h1>The Houses of Haight&nbsp;St&nbsp;Commons</h1>
+      <p class="standfirst">A network of not-for-profit co-ops and intentional communities in the heart of the city — each entry written and kept current by the house itself.</p>
+      <hr class="rule-heavy">
+    </div>
+
+    <div class="filterbar">
+      <span class="lbl">Show me&hellip;</span>
+      <div class="filters" id="filters" role="group" aria-label="Filter the roster">
+        <button class="filt vac" data-tag="available" aria-pressed="false">Vacancy now</button>
+        <span class="sep" aria-hidden="true">·</span>
+        <button class="filt" data-tag="pets" aria-pressed="false">pets welcome</button>
+        <button class="filt" data-tag="dinner" aria-pressed="false">weekly dinner</button>
+        <button class="filt" data-tag="intergen" aria-pressed="false">intergenerational</button>
+        <span class="sep" aria-hidden="true">·</span>
+        <button class="filt" data-tag="haight" aria-pressed="false">Haight-Ashbury</button>
+        <button class="filt" data-tag="lowerhaight" aria-pressed="false">Lower Haight</button>
+        <button class="filt" data-tag="colevalley" aria-pressed="false">Cole Valley</button>
+        <button class="filt" data-tag="nopa" aria-pressed="false">NoPa</button>
+      </div>
+      <span class="tally" id="tally"></span>
+    </div>
+
+    <div class="ledger" id="ledger"></div>
+    <p class="empty" id="empty">No houses match that just now. Try lifting a filter.</p>
+  </section>
+
+  <!-- ================= EVENTS ================= -->
+  <section id="view-events">
+    <div class="masthead">
+      <p class="dateline">October 2026 · Open to all</p>
+      <h1>The Commons Calendar</h1>
+      <p class="standfirst">Shared dinners, open houses, work parties, and gatherings — hosted by houses across the network. Come by; each host posts their own RSVP.</p>
+      <hr class="rule-heavy">
+    </div>
+    <div id="events"></div>
+  </section>
+
+  <footer class="colophon">
+    <span>Maintained by the houses of Haight&nbsp;St&nbsp;Commons.</span>
+    <span>Entries older than 45 days are retired from the roster.</span>
+    <span><a>Log in</a> &nbsp;·&nbsp; <a>Add your house</a></span>
+    <span class="mock">Mockup · placeholder houses</span>
+  </footer>
+</main>
+
+<script>
+  const root = document.documentElement;
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const cur = root.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : cur === 'light' ? 'dark'
+      : (matchMedia('(prefers-color-scheme: dark)').matches ? 'light' : 'dark');
+    root.setAttribute('data-theme', next);
+  });
+
+  // view switch
+  const navLinks = document.querySelectorAll('nav.links a');
+  navLinks.forEach(a => a.addEventListener('click', () => {
+    const v = a.dataset.view; if (!v) return;
+    navLinks.forEach(x => x.classList.toggle('active', x === a));
+    document.getElementById('view-houses').style.display = v === 'houses' ? '' : 'none';
+    document.getElementById('view-events').style.display = v === 'events' ? '' : 'none';
+    window.scrollTo({ top: 0 });
+  }));
+
+  // ---- placeholder roster ----
+  const houses = [
+    { name:"Fig House", hood:"Haight-Ashbury", tags:["available","dinner","pets","haight"],
+      beds:11, residents:9, rent:"$1,350–1,700", logged:"logged 6 days ago",
+      traits:["weekly dinner","dogs & cats","consensus"],
+      desc:"A big Victorian built around a shared table. Sunday dinners for the whole house, a garden out back, and a slow-consensus way of deciding things that newcomers either love or learn to." },
+    { name:"Canyon House", hood:"Cole Valley", tags:["dinner","intergen","colevalley"],
+      beds:7, residents:7, rent:"$1,500–1,900", logged:"logged 3 weeks ago",
+      traits:["intergenerational","weekly dinner","quiet"],
+      desc:"Residents from their twenties to their sixties under one roof — quiet, book-lined, and steps from the N-Judah and the park. Open a window and you can hear the Sunday drum circle." },
+    { name:"Lantern House", hood:"Lower Haight", tags:["available","pets","lowerhaight"],
+      beds:9, residents:8, rent:"$1,100–1,450", logged:"logged yesterday",
+      traits:["dog-friendly","mural walls","rolling intake"],
+      desc:"The affordable one, and proud of it. Dog-friendly, mural-covered, loud in the best way. Admits on a rolling basis rather than all at once — email if a room speaks to you." },
+    { name:"The Grove", hood:"NoPa", tags:["dinner","intergen","nopa"],
+      beds:6, residents:6, rent:"$1,600–2,000", logged:"logged 2 weeks ago",
+      traits:["intergenerational","Thursday dinner","garden"],
+      desc:"Small, calm, and serious about shared meals. A standing Thursday dinner nobody misses, a seed library on the porch, and compost that could win awards." },
+    { name:"Meridian", hood:"Haight-Ashbury", tags:["available","dinner","intergen","haight"],
+      beds:12, residents:11, rent:"$1,400–1,800", logged:"logged 4 days ago",
+      traits:["monthly salon","woodshop","hosts newcomers"],
+      desc:"One of the largest houses in the network and one of the oldest. Monthly salons, a working woodshop in the basement, and a long habit of taking a chance on people new to communal living." },
+    { name:"Tidewater", hood:"Lower Haight", tags:["pets","lowerhaight"],
+      beds:8, residents:7, rent:"$1,150–1,500", logged:"logged 5 weeks ago",
+      traits:["three cats","bikes in the hall","thrift & repair"],
+      desc:"Co-op kitchen, bikes in the hall, three cats who run the place. Values thrift, repair, and keeping rent low enough to keep saying yes to artists and organizers." },
+  ];
+
+  const events = [
+    { mo:"OCT", d:"08", title:"Open House & Shared Dinner", host:"Fig House", where:"Haight-Ashbury", time:"Wed · 6:30 PM" },
+    { mo:"OCT", d:"12", title:"Garden Work Party", host:"Tidewater", where:"Lower Haight", time:"Sun · 10:00 AM" },
+    { mo:"OCT", d:"19", title:"Salon: On Living in Common", host:"Meridian", where:"Haight-Ashbury", time:"Sun · 7:00 PM" },
+    { mo:"OCT", d:"26", title:"Newcomer Mixer", host:"the Commons", where:"NoPa", time:"Sun · 5:00 PM" },
+    { mo:"NOV", d:"02", title:"Repair Café", host:"The Grove", where:"NoPa", time:"Sun · 1:00 PM" },
+  ];
+
+  const esc = s => s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  const ledger = document.getElementById('ledger');
+
+  function entry(h, i) {
+    const avail = h.tags.includes('available');
+    const no = String(i + 1).padStart(2, '0');
+    return `
+    <article class="entry" data-tags="${h.tags.join(' ')}">
+      <div class="idx">No.<b>${no}</b></div>
+      <div class="entry-main">
+        <div class="entry-head">
+          <h2 class="h-name">${esc(h.name)}</h2>
+          ${avail ? '<span class="stamp">Vacancy</span>' : ''}
+        </div>
+        <p class="meta-line">${esc(h.hood)} &nbsp;·&nbsp; ${h.beds} bedrooms &nbsp;·&nbsp; ${h.residents} residents &nbsp;·&nbsp; <span class="rent">${esc(h.rent)}/mo</span></p>
+        <p class="desc">${esc(h.desc)}</p>
+        <div class="entry-foot">
+          <span class="traits">${h.traits.map(esc).join('<span class="d">·</span>')}</span>
+          <span class="logged">${esc(h.logged)}</span>
+          ${avail
+            ? '<a class="apply" href="#">Apply to this house</a>'
+            : '<span class="closed">not recruiting right now</span>'}
+        </div>
+      </div>
+    </article>`;
+  }
+  ledger.innerHTML = houses.map(entry).join('');
+
+  // ---- filtering ----
+  const active = new Set();
+  const tally = document.getElementById('tally');
+  const emptyEl = document.getElementById('empty');
+  function apply() {
+    let shown = 0;
+    [...ledger.children].forEach(c => {
+      const tags = c.dataset.tags.split(' ');
+      const ok = [...active].every(t => tags.includes(t));
+      c.style.display = ok ? '' : 'none';
+      if (ok) shown++;
+    });
+    emptyEl.style.display = shown ? 'none' : 'block';
+    tally.innerHTML = `<b>${shown}</b> of ${houses.length}`;
+  }
+  document.getElementById('filters').addEventListener('click', e => {
+    const b = e.target.closest('.filt'); if (!b) return;
+    const t = b.dataset.tag, on = b.getAttribute('aria-pressed') === 'true';
+    b.setAttribute('aria-pressed', String(!on));
+    on ? active.delete(t) : active.add(t);
+    apply();
+  });
+  apply();
+
+  // ---- events ----
+  document.getElementById('events').innerHTML = events.map(e => `
+    <div class="ev">
+      <div class="when">${e.mo}<b>${e.d}</b></div>
+      <div><h3>${esc(e.title)}</h3><p>Hosted by ${esc(e.host)} · ${esc(e.where)}</p></div>
+      <div class="time">${esc(e.time)}<a href="#">RSVP →</a></div>
+    </div>`).join('');
+</script>
+
+</body></html>

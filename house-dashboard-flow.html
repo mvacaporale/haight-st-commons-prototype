@@ -348,7 +348,8 @@
           </div>
 
           <div class="bn"><b>Builder note · two objects</b>One <code>house</code> row (persistent profile) has zero-or-more <code>listing</code> rows (room openings). The dashboard is the hub; "Edit house info" and "Create a listing" are distinct writes. RLS scopes both to the signed-in member's <code>house_id</code>.</div>
-          <div class="bn"><b>Builder note · accounts</b>Email + password auth (Supabase), <em>not</em> Google — house Gmails have 2FA friction. Signup captures 1–2 resident cell numbers; an SMS OTP verifies a real human runs the house (that's the <b>Verified</b> chip above). One account per house, transferable when a member leaves.</div>
+          <div class="bn"><b>Builder note · accounts</b>Supabase Auth with emailed magic links, no passwords and <em>no</em> SMS. A house applies via the "Add your House" form; an admin approves it, creates the <code>house</code> row, and adds 1–3 resident emails to <code>house_members</code>. Approval is what the <b>Verified</b> chip means. When someone moves out, the house (or an admin) swaps their email; nothing else changes.</div>
+          <div class="bn"><b>Builder note · no app server</b>This dashboard is one static page on GitHub Pages that talks to Supabase directly with <code>supabase-js</code>. RLS is the security boundary, so there's no Next.js / Node server to host. Every save to <code>house</code> or <code>listing</code> fires a webhook that rebuilds the public home page (see README).</div>
         </section>
 
         <!-- HOUSE INFO (edit profile) -->
@@ -375,7 +376,7 @@
             <div class="drow"><span>Transit within a 15-min walk</span><span>5-Fulton · 21-Hayes · 7-Haight</span></div>
             <div class="drow"><span>Nearest grocery</span><span>0.2 mi</span></div>
           </div>
-          <div class="bn"><b>Builder note · address privacy</b>Address on a private, RLS-protected column — no public API path returns it. Geocode once on save; expose only the derived fields + neighborhood. Phase 2 refines the transit source (walking-time vs GTFS).</div>
+          <div class="bn"><b>Builder note · address privacy</b>Address on a private, RLS-protected column — no public API path returns it. Geocode once on save in a small Supabase Edge Function; expose only the derived fields + neighborhood. Phase 2 refines the transit source (walking-time vs GTFS).</div>
 
           <div class="sectlabel">The house</div>
           <div class="field"><label>In a few lines <span class="req">*</span></label>
@@ -454,7 +455,7 @@
 
           <div class="note"><span class="ic">↻</span><div><b>Lives for 45 days.</b> We'll nudge you to re-confirm before it expires. Mark the room filled any time and the listing comes down — your house info stays up.</div></div>
 
-          <div class="bn"><b>Builder note · listing lifecycle</b>Insert a <code>listing</code> row: <code>house_id</code>, <code>move_in</code>, <code>rent</code>, <code>dues</code>, <code>term</code>, <code>apply_url</code>, <code>note</code>, <code>created_at</code>, <code>confirmed_at</code>. Publishing is live immediately (no moderation gate in v1; keep a nullable <code>review_status</code> for later). A daily job expires listings where <code>now − confirmed_at &gt; 45d</code> and emails a re-confirm nudge ~day 40.</div>
+          <div class="bn"><b>Builder note · listing lifecycle</b>Insert a <code>listing</code> row: <code>house_id</code>, <code>move_in</code>, <code>rent</code>, <code>dues</code>, <code>term</code>, <code>apply_url</code>, <code>note</code>, <code>created_at</code>, <code>confirmed_at</code>. Publishing is live immediately (no moderation gate in v1; keep a nullable <code>review_status</code> for later). A daily Supabase scheduled job (<code>pg_cron</code>) expires listings where <code>now − confirmed_at &gt; 45d</code>, and an Edge Function emails a re-confirm nudge ~day 40 (Resend or similar). The nudge links straight back here; "Still open" just bumps <code>confirmed_at</code>.</div>
 
           <div class="actions">
             <button class="btn btn-ghost" data-view="dash">← Cancel</button>
@@ -469,7 +470,7 @@
     <div class="toast" id="toast"><span class="tk">✓</span> <span id="toastMsg">Saved</span></div>
   </div>
 
-  <p class="footline">Mockup for <code>5. Code/haight-st-commons/Platform Build Spec.md</code> · public home page designed separately · nothing built yet</p>
+  <p class="footline">Mockup for the platform design in this repo's <code>README.md</code> · public home page designed separately · nothing built yet</p>
 </div>
 
 <script>
